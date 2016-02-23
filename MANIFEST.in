@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include luma *.css
+recursive-include luma *.csv
+recursive-include luma *.html
+recursive-include luma *.ico
+recursive-include luma *.js
+recursive-include luma *.json
+recursive-include luma *.md
+recursive-include luma *.png
+recursive-include luma *.py
+recursive-include luma *.svg
+recursive-include luma *.txt
+recursive-exclude luma *.pyc
