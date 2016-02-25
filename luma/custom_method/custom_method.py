@@ -1,7 +1,4 @@
 
-# Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
-# License: GNU General Public License v3. See license.txt
-
 from __future__ import unicode_literals
 import frappe
 import json
@@ -17,10 +14,7 @@ from erpnext.controllers.selling_controller import SellingController
 
 @frappe.whitelist()
 def make_delivery_note_cs(source_name=None, target_doc=None, item_code=None, test_list=None):
-	# frappe.msgprint(test_list)
 	test_list_json = json.loads(test_list)
-	# frappe.msgprint(len(test_list_json))
-	# frappe.msgprint(test_list_json[1])
 	for source_name in test_list_json:
 		def set_missing_values(source, target):
 			if source.po_no:
@@ -123,11 +117,9 @@ def make_delivery_note(source_name, target_doc=None, item_code=None, test_list=N
 def get_so_details(item_code,customer):
 	if not customer:
 		frappe.throw("Please select Customer")
-	# frappe.msgprint("in py")
-	# frappe.msgprint(item_code)
+
 	return {
-	# "get_test_data": frappe.db.sql("""select name,customer from `tabSales Order` where customer='%s' and docstatus=1 order by name"""%(customer), as_list=1)
 	"get_test_data": frappe.db.sql("""select so.name, si.qty, si.rate, so.delivery_date,si.item_code 
 		from `tabSales Order` as so, `tabSales Order Item` si 
-		where si.parent=so.name and so.docstatus=1 and so.customer='%s' and si.item_code='%s' order by so.delivery_date"""%(customer,item_code), as_list=1)
+		where si.parent=so.name and so.docstatus=1 and so.customer='%s' and si.item_code='%s' and si.delivered_qty<si.qty order by so.delivery_date"""%(customer,item_code), as_list=1)
 	}
