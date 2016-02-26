@@ -119,7 +119,7 @@ def get_so_details(item_code,customer):
 		frappe.throw("Please select Customer")
 
 	return {
-	"get_test_data": frappe.db.sql("""select so.name, si.qty, si.rate, so.delivery_date,si.item_code 
-		from `tabSales Order` as so, `tabSales Order Item` si 
-		where si.parent=so.name and so.docstatus=1 and so.customer='%s' and si.item_code='%s' and si.delivered_qty<si.qty order by so.delivery_date"""%(customer,item_code), as_list=1)
+	"get_test_data": frappe.db.sql("""select so.name, si.qty, si.rate, si.delivered_qty, so.delivery_date, si.stock_uom, c.symbol, si.item_code 
+		from `tabSales Order` as so, `tabSales Order Item` si, tabCurrency c 
+		where si.parent=so.name and c.name=so.currency and so.docstatus=1 and so.customer='%s' and si.item_code='%s' and si.delivered_qty<si.qty order by so.delivery_date"""%(customer,item_code), as_list=1)
 	}
