@@ -123,3 +123,51 @@ def get_so_details(item_code,customer):
 		from `tabSales Order` as so, `tabSales Order Item` si, tabCurrency c 
 		where si.parent=so.name and c.name=so.currency and so.docstatus=1 and so.customer='%s' and si.item_code='%s' and si.delivered_qty<si.qty order by so.delivery_date"""%(customer,item_code), as_list=1)
 	}
+
+
+@frappe.whitelist()	
+def get_items_from_production_order(production_order):
+	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,date_format(t2.planned_start_date,'%d-%m-%Y') as date,
+							(t2.qty - t2.custom_manufactured_qty - t2.produced_qty) as qty 
+							from `tabItem`t1,`tabProduction Order`t2 
+							where t1.item_code = t2.production_item 
+							and t2.name ='{0}'""".format(production_order),as_dict=1,debug=1)
+
+@frappe.whitelist()	
+def get_items_from_po(supplier,item_code):
+	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,(t1.qty - t1.received_qty - t1.custom_received_qty) as qty,
+							t2.transaction_date
+							from `tabPurchase Order Item`t1 ,`tabPurchase Order`t2 
+							where t1.parent = t2.name and t2.supplier = "{0}" 
+							and t1.item_code = "{1}" and t2.docstatus = 1  order by t2.transaction_date asc """.format(supplier,item_code),as_dict=1,debug=1)
+
+@frappe.whitelist()	
+def update_custom_received_qty(update_po):
+	update_po = json.loads(update_po)
+	for i in update_po:
+		change_custom_received_qty(i['purchase_order'],i['item_code'],i['qty'])
+		
+def change_custom_received_qty(purchase_order,item_code,qty):
+	purchase_order = frappe.get_doc("Purchase Order",purchase_order)
+	for row in purchase_order.items:
+		if row.item_code == item_code:
+			row.custom_received_qty = row.custom_received_qty + qty
+			row.save(ignore_permissions = True)
+
+@frappe.whitelist()
+def update_custom_manufactured_qty(update_production_order):
+	update_production_order = json.loads(update_production_order)
+	for i in update_production_order:
+		change_custom_manufactured_qty(i['production_order'],i['item_code'],i['qty'])
+		
+def change_custom_manufactured_qty(production_order,item_code,qty):
+	production_order = frappe.get_doc("Production Order",production_order)
+	if item_code == production_order.production_item:
+		production_order.custom_manufactured_qty = production_order.custom_manufactured_qty + qty
+		production_order.save(ignore_permissions = True)
+
+
+def filter_items(doctype, txt, searchfield, start, page_len, filters):
+	print filters['supplier']
+	return frappe.db.sql("""select distinct item_code from `tabPurchase Order Item`t1,
+							`tabPurchase Order`t2 where t1.parent = t2.name and t2.supplier = '{0}' and t2.docstatus = 1""".format(filters['supplier']),as_list=1,debug=1)
