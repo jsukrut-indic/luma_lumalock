@@ -47,6 +47,7 @@ frappe.ui.form.on("Stock Entry", {
 									<td align='center'><b>Description</b></td>\
 									<td align='center'><b>Purchase Order No.</b></td>\
 									<td align='center'><b>QTY</b></td>\
+									<td align='center'><b>Price</b></td>\
 									<td align='center'><b>Date Of Purchase</b></td>\
 									<td align='center'></td></tr></thead>"
 							html +=	"<tbody class='tr-tbody'>"
@@ -58,6 +59,7 @@ frappe.ui.form.on("Stock Entry", {
 									<td align='center'>"+r.message[i]['description']+"</td>\
 									<td align='center'>"+r.message[i]['name']+"</td>\
 									<td align='center'>"+r.message[i]['qty']+"</td>\
+									<td align='center'>"+r.message[i]['price_list_rate']+"</td>\
 									<td align='center'>"+r.message[i]['transaction_date']+"</td>\
 									<td align='center'><input type='checkbox' class='select' id='_select' value='"+r.message[i]['name']+"'></td>"
 								}
@@ -262,7 +264,7 @@ add_production_order_items = function(items_to_add,i){
 	                row.uom = d.stock_uom;
 	                row.stock_uom = d.stock_uom;
 	                row.conversion_factor = 1;
-	                row.transfer_qty = d.qty - d.custom_received_qty;
+	                row.transfer_qty = d.qty - d.custom_manufactured_qty;
 	                row.production_order = d.name;
 	        	});
 	        	refresh_field("items");

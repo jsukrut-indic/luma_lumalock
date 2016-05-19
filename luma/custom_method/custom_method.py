@@ -131,12 +131,12 @@ def get_items_from_production_order(production_order):
 							(t2.qty - t2.custom_manufactured_qty - t2.produced_qty) as qty 
 							from `tabItem`t1,`tabProduction Order`t2 
 							where t1.item_code = t2.production_item 
-							and t2.name ='{0}'""".format(production_order),as_dict=1,debug=1)
+							and t2.name ='{0}' order by date asc""".format(production_order),as_dict=1,debug=1)
 
 @frappe.whitelist()	
 def get_items_from_po(supplier,item_code):
 	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,(t1.qty - t1.received_qty - t1.custom_received_qty) as qty,
-							t2.transaction_date
+							t1.price_list_rate,t2.transaction_date
 							from `tabPurchase Order Item`t1 ,`tabPurchase Order`t2 
 							where t1.parent = t2.name and t2.supplier = "{0}" 
 							and t1.item_code = "{1}" and t2.docstatus = 1  order by t2.transaction_date asc """.format(supplier,item_code),as_dict=1,debug=1)
