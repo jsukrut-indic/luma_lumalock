@@ -48,6 +48,7 @@ frappe.ui.form.on("Stock Entry", {
 									<td align='center'><b>Purchase Order No.</b></td>\
 									<td align='center'><b>QTY</b></td>\
 									<td align='center'><b>Price</b></td>\
+									<td align='center'><b>Total</b></td>\
 									<td align='center'><b>Date Of Purchase</b></td>\
 									<td align='center'></td></tr></thead>"
 							html +=	"<tbody class='tr-tbody'>"
@@ -60,6 +61,7 @@ frappe.ui.form.on("Stock Entry", {
 									<td align='center'>"+r.message[i]['name']+"</td>\
 									<td align='center'>"+r.message[i]['qty']+"</td>\
 									<td align='center'>"+r.message[i]['price_list_rate']+"</td>\
+									<td align='center'>"+r.message[i]['amount']+"</td>\
 									<td align='center'>"+r.message[i]['transaction_date']+"</td>\
 									<td align='center'><input type='checkbox' class='select' id='_select' value='"+r.message[i]['name']+"'></td>"
 								}
