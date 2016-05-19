@@ -55,6 +55,9 @@ fixtures = ["Custom Script"]
 
 # notification_config = "luma.notifications.get_notification_config"
 
+# Add Fixtures
+fixtures =['Custom Field', "Property Setter","Custom Script"]
+
 # Permissions
 # -----------
 # Permissions evaluated in scripted ways
