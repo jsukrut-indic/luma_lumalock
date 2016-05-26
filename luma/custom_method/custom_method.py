@@ -224,5 +224,7 @@ def change_custom_manufactured_qty(production_order,item_code,qty):
 
 def filter_items(doctype, txt, searchfield, start, page_len, filters):
 	print filters['supplier']
-	return frappe.db.sql("""select distinct item_code from `tabPurchase Order Item`t1,
-							`tabPurchase Order`t2 where t1.parent = t2.name and t2.supplier = '{0}' and t2.docstatus = 1""".format(filters['supplier']),as_list=1,debug=1)
+	return frappe.db.sql("""select item_code,item_name from `tabPurchase Order Item`t1,
+							`tabPurchase Order`t2 where t1.parent = t2.name 
+							and t2.supplier = '{0}' and t2.docstatus = 1
+							and (item_name like '{txt}' or item_code like '{txt}' )limit 20""".format(filters['supplier'],txt= "%%%s%%" % txt),as_list=1,debug=1)
