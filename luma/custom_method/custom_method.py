@@ -64,6 +64,48 @@ def make_delivery_note_cs(source_name=None, target_doc=None, item_code=None, tes
 	return target_doc
 
 @frappe.whitelist()
+def make_purchase_receipt(source_name=None, target_doc=None, item_code=None, test_list=None):
+	test_list_json = json.loads(test_list)
+	for source_name in test_list_json:
+		def set_missing_values(source, target):
+			target.ignore_pricing_rule = 1
+			target.run_method("set_missing_values")
+			target.run_method("calculate_taxes_and_totals")
+
+		def update_item(obj, target, source_parent):
+			target.qty = flt(obj.qty) - flt(obj.received_qty)
+			target.stock_qty = (flt(obj.qty) - flt(obj.received_qty)) * flt(obj.conversion_factor)
+			target.amount = (flt(obj.qty) - flt(obj.received_qty)) * flt(obj.rate)
+			target.base_amount = (flt(obj.qty) - flt(obj.received_qty)) * \
+				flt(obj.rate) * flt(source_parent.conversion_rate)
+
+		target_doc = get_mapped_doc("Purchase Order", source_name,	{
+			"Purchase Order": {
+				"doctype": "Purchase Receipt",
+				"validation": {
+					"docstatus": ["=", 1],
+				}
+			},
+			"Purchase Order Item": {
+				"doctype": "Purchase Receipt Item",
+				"field_map": {
+					"name": "prevdoc_detail_docname",
+					"parent": "prevdoc_docname",
+					"parenttype": "prevdoc_doctype",
+				},
+				"postprocess": update_item,
+				"condition": lambda doc: abs(doc.received_qty) < abs(doc.qty) and doc.delivered_by_supplier!=1 and doc.item_code==item_code
+			},
+			"Purchase Taxes and Charges": {
+				"doctype": "Purchase Taxes and Charges",
+				"add_if_empty": True
+			}
+	}, target_doc, set_missing_values)
+
+	return target_doc
+
+
+@frappe.whitelist()
 def make_delivery_note(source_name, target_doc=None, item_code=None, test_list=None):
 	def set_missing_values(source, target):
 		if source.po_no:
@@ -124,6 +166,19 @@ def get_so_details(item_code,customer):
 		where si.parent=so.name and c.name=so.currency and so.docstatus=1 and so.customer='%s' and si.item_code='%s' and si.delivered_qty<si.qty order by so.delivery_date"""%(customer,item_code), as_list=1)
 	}
 
+@frappe.whitelist()
+def get_po_details(item_code,supplier):
+	if not supplier:
+		frappe.throw("Please select Supplier")
+
+	return {
+	"get_test_data": frappe.db.sql("""select po.name, pi.qty, pi.rate, ( pi.qty - pi.received_qty), po.transaction_date, pi.stock_uom, pi.item_code 
+		from `tabPurchase Order` as po, `tabPurchase Order Item` pi, tabCurrency c 
+		where pi.parent=po.name and c.name=po.currency and po.docstatus=1 and po.supplier='%s' and pi.item_code='%s' and pi.received_qty<pi.qty order by po.transaction_date"""%(supplier,item_code), as_list=1)
+	}
+
+
+
 
 @frappe.whitelist()	
 def get_items_from_production_order(production_order):
@@ -135,24 +190,24 @@ def get_items_from_production_order(production_order):
 
 @frappe.whitelist()	
 def get_items_from_po(supplier,item_code):
-	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,(t1.qty - t1.received_qty - t1.custom_received_qty) as qty,
-							t1.price_list_rate,((t1.qty - t1.received_qty - t1.custom_received_qty) * t1.price_list_rate) as amount,t2.transaction_date
+	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,(t1.qty - t1.received_qty) as qty,
+							t1.price_list_rate,((t1.qty - t1.received_qty) * t1.price_list_rate) as amount,t2.transaction_date
 							from `tabPurchase Order Item`t1 ,`tabPurchase Order`t2 
 							where t1.parent = t2.name and t2.supplier = "{0}" 
 							and t1.item_code = "{1}" and t2.docstatus = 1  order by t2.transaction_date asc """.format(supplier,item_code),as_dict=1,debug=1)
 
-@frappe.whitelist()	
-def update_custom_received_qty(update_po):
-	update_po = json.loads(update_po)
-	for i in update_po:
-		change_custom_received_qty(i['purchase_order'],i['item_code'],i['qty'])
+# @frappe.whitelist()	
+# def update_custom_received_qty(update_po):
+# 	update_po = json.loads(update_po)
+# 	for i in update_po:
+# 		change_custom_received_qty(i['purchase_order'],i['item_code'],i['qty'])
 		
-def change_custom_received_qty(purchase_order,item_code,qty):
-	purchase_order = frappe.get_doc("Purchase Order",purchase_order)
-	for row in purchase_order.items:
-		if row.item_code == item_code:
-			row.custom_received_qty = row.custom_received_qty + qty
-			row.save(ignore_permissions = True)
+# def change_custom_received_qty(purchase_order,item_code,qty):
+# 	purchase_order = frappe.get_doc("Purchase Order",purchase_order)
+# 	for row in purchase_order.items:
+# 		if row.item_code == item_code:
+# 			row.custom_received_qty = row.custom_received_qty + qty
+# 			row.save(ignore_permissions = True)
 
 @frappe.whitelist()
 def update_custom_manufactured_qty(update_production_order):

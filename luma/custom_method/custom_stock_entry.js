@@ -2,7 +2,7 @@ frappe.ui.form.on("Stock Entry", {
 	refresh: function(doc, dt, dn) {			
 		if (this.cur_frm.doc.docstatus===0) {
 			// Get Items from Purchase Order
-			cur_frm.add_custom_button(__('Get Items from Purchase Order'),
+			/*cur_frm.add_custom_button(__('Get Items from Purchase Order'),
 				function() {
 				var me = this;
 				this.dialog = new frappe.ui.Dialog({
@@ -25,7 +25,6 @@ frappe.ui.form.on("Stock Entry", {
 					primary_action_label: "ADD",
            			primary_action: function(){
                 		add_po_items_to_stock(me.dialog)
-                		/*me.hide_dialog()*/
                 	}
 				});
 				me.dialog.show();
@@ -96,7 +95,7 @@ frappe.ui.form.on("Stock Entry", {
 		                msgprint("Select Item Before Add")
 		            }
 				}
-			});
+			});*/
 
 
 			// Get Items from Production Order
@@ -139,10 +138,11 @@ frappe.ui.form.on("Stock Entry", {
 							if(r.message){
 								html = "<table class='table' id='tr-table'><thead><tr class='row'>\
 										<td align='center'><b>Item code</b></td>\
-										<td align='center'><b>Description</b></td>\
+										<td align='center' style='width:57%'><b>Description</b></td>\
 										<td align='center'><b>Production Order No.</b></td>\
 										<td align='center'><b>Pending QTY</b></td>\
-										<td align='center'><b>Date</b></td>\
+										<td align='center' style='width:100%'><b>Date</b></td>\
+										<td align='center'><b>Received QTY</b></td>\
 										<td align='center'></td></tr></thead>"
 								html +=	"<tbody class='tr-tbody'>"
 			  				
@@ -154,6 +154,7 @@ frappe.ui.form.on("Stock Entry", {
 										<td align='center'>"+r.message[i]['name']+"</td>\
 										<td align='center'>"+r.message[i]['qty']+"</td>\
 										<td align='center'>"+r.message[i]['date']+"</td>\
+										<td align='center'><input type='number' class='received' style='width:79%' min = '1' max='"+r.message[i]['qty']+"' step='any'></td>\
 										<td align='center'><input type='checkbox' class='select' id='_select' value='"+r.message[i]['name']+"'></td>"
 									}
 									else if(r.message.length == 1 && r.message[i]['qty'] == 0){
@@ -169,6 +170,8 @@ frappe.ui.form.on("Stock Entry", {
 					});
 				});
 
+				
+					
 				add_production_order_items_to_stock = function(){
 					var items_to_add = []
 		            value = me.dialog.get_values();
