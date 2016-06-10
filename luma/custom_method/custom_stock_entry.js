@@ -1,5 +1,5 @@
 frappe.ui.form.on("Stock Entry", {
-	refresh: function(doc, dt, dn) {			
+	refresh: function(doc, dt, dn) {
 		if (this.cur_frm.doc.docstatus===0) {
 			// Get Items from Purchase Order
 			/*cur_frm.add_custom_button(__('Get Items from Purchase Order'),
@@ -99,13 +99,27 @@ frappe.ui.form.on("Stock Entry", {
 
 
 			// Get Items from Production Order
-			cur_frm.add_custom_button(__('Get Items from Production Order'),
-				function() {
+			cur_frm.add_custom_button(__('Get Items from Production Order'),function() {
+				cur_frm.set_value("purpose","Manufacture")
+				cur_frm.set_df_property("from_bom","hidden",1)
+				cur_frm.set_df_property("production_order","hidden",1)
+				cur_frm.set_df_property("from_warehouse","hidden",1)	
+				cur_frm.set_df_property("to_warehouse","hidden",1)
 				var me = this;
 				this.dialog = new frappe.ui.Dialog({
 					title: "Get Items from Production Order",
 					fields: [
-						{"fieldtype": "Link", "label": __("Production Order"), "fieldname": "production_order","options":'Production Order',"reqd": 1, 
+						{"fieldtype": "Link", "label": __("Production Order Item"), "fieldname": "production_order_item","options":'Item',"reqd": 1, 
+							get_query: function() {
+								return {
+									query:"luma.custom_method.custom_method.filter_production_items",
+									/*filters:{
+										"docstatus":1
+									},*/
+								}
+							},
+						},
+						/*{"fieldtype": "Link", "label": __("Production Order"), "fieldname": "production_order","options":'Production Order',"reqd": 1, 
 							get_query: function() {
 								return {
 									filters:{
@@ -113,13 +127,14 @@ frappe.ui.form.on("Stock Entry", {
 									},
 								}
 							},
-						},
+						},*/
 						{"fieldtype": "Button", "label": __("Get"), "fieldname": "get"},
 						{"fieldtype": "HTML", "fieldname": "production_order_items_details"},
 					],
 					primary_action_label: "ADD",
            			primary_action: function(){
-                		add_production_order_items_to_stock(me.dialog)
+                		add_production_order_items_to_stock()
+                		/*add_production_order_items_to_stock(me.dialog,fd)*/
                 		/*me.hide_dialog()*/
                 	}
 				});
@@ -127,14 +142,16 @@ frappe.ui.form.on("Stock Entry", {
 				fd = this.dialog.fields_dict;
 				this.dialog.fields_dict.get.$input.click(function() {
 					value = me.dialog.get_values();
-					console.log(value.production_order,"production_order")
+					console.log(value.production_order_item,"production_item")
+					/*console.log(value.production_order,"production_order")*/
 					frappe.call({
 						method: "luma.custom_method.custom_method.get_items_from_production_order",
 						args:{
-							"production_order":value.production_order
+							"item_code":value.production_order_item
 						},
 						callback: function(r) {
 							console.log(r.message)
+							console.log(r.message.length,"length")
 							if(r.message){
 								html = "<table class='table' id='tr-table'><thead><tr class='row'>\
 										<td align='center'><b>Item code</b></td>\
@@ -142,7 +159,7 @@ frappe.ui.form.on("Stock Entry", {
 										<td align='center'><b>Production Order No.</b></td>\
 										<td align='center'><b>Pending QTY</b></td>\
 										<td align='center' style='width:100%'><b>Date</b></td>\
-										<td align='center'><b>Received QTY</b></td>\
+										<td align='center'><b>Produced QTY</b></td>\
 										<td align='center'></td></tr></thead>"
 								html +=	"<tbody class='tr-tbody'>"
 			  				
@@ -165,22 +182,44 @@ frappe.ui.form.on("Stock Entry", {
 		                	}    
   							$(fd.production_order_items_details.$wrapper).empty()
 		                    $(fd.production_order_items_details.$wrapper).append(html)
+		                    /*$(fd.production_order_items_details.$wrapper).find('.received').change(function(){
+		                		if(parseFloat($('.received').val()) <= 0){
+									$(this).val(1)
+								}    	
+		                    })*/
+		                    prevent_negative_produced_qty()
 		                    me.dialog.show();
 						},
 					});
 				});
-
 				
-					
+				prevent_negative_produced_qty = function(){
+					console.log($(fd.production_order_items_details.$wrapper).find('.received'))
+					console.log("in prevent_negative_produced_qty")
+					$(fd.production_order_items_details.$wrapper).find('.received').change(function(){
+						console.log($(this).attr('max'),"max")
+						if(parseFloat($(this).val()) <= 0 || parseFloat($(this).val()) > parseFloat($(this).attr('max'))){
+							$(this).val(1)
+						}
+					})
+				},	
 				add_production_order_items_to_stock = function(){
 					var items_to_add = []
+					var produced_qty_list = []
 		            value = me.dialog.get_values();
 		            $.each($(fd.production_order_items_details.wrapper).find(".select:checked"), function(name, item){
 		                items_to_add.push($(item).val());
 		            });
+		            $.each($(fd.production_order_items_details.wrapper).find(".received"), function(name, item){
+		                if(parseFloat($(this).val()) > 0){
+		                	produced_qty_list.push($(item).val());
+		            	}
+		            });
+		            console.log(produced_qty_list,"produced_qty_list")
+		            console.log(items_to_add,"list of production_order")
 		            if(items_to_add.length > 0){
 		                for(i=0;i<items_to_add.length;i++){
-		                	add_production_order_items(items_to_add,i)
+		                	add_production_order_items(items_to_add,produced_qty_list,i)
 		            	}
 		            	me.dialog.hide()
 		            }	
@@ -190,6 +229,12 @@ frappe.ui.form.on("Stock Entry", {
 				}
 			});
 		}
+	},
+	purpose:function(frm){
+		cur_frm.set_df_property("from_bom","hidden",0)
+		cur_frm.set_df_property("production_order","hidden",0)
+		cur_frm.set_df_property("from_warehouse","hidden",0)	
+		cur_frm.set_df_property("to_warehouse","hidden",0)
 	},
 	on_submit: function() {
 		update_po = []
@@ -259,7 +304,7 @@ add_po_items = function(items_to_add,item_code,i){
 	});
 }
 
-add_production_order_items = function(items_to_add,i){
+add_production_order_items = function(items_to_add,produced_qty_list,i){
 	var me = this
 	frappe.call({    
 		method: "frappe.client.get_list",
@@ -275,12 +320,14 @@ add_production_order_items = function(items_to_add,i){
 				console.log(res.message[0]['production_item'],"production_item")
 				var row = frappe.model.add_child(cur_frm.doc, "Stock Entry Detail", "items");
                 row.item_code = res.message[0]['production_item'];
-                row.qty = res.message[0]['qty'] - res.message[0]['custom_manufactured_qty'];
-                row.s_warehouse = res.message[0]['fg_warehouse'];
+                row.qty = parseFloat(produced_qty_list[i]);
+                row.transfer_qty = parseFloat(produced_qty_list[i]);
+                /*row.qty = res.message[0]['qty']	 - res.message[0]['custom_manufactured_qty'];
+                row.transfer_qty = res.message[0]['qty'] - res.message[0]['custom_manufactured_qty'];*/
+                row.t_warehouse = res.message[0]['fg_warehouse'];
                 row.uom = res.message[0]['stock_uom'];
                 row.stock_uom = res.message[0]['stock_uom'];
                 row.conversion_factor = 1;
-                row.transfer_qty = res.message[0]['qty'] - res.message[0]['custom_manufactured_qty'];
                 row.production_order = res.message[0]['name'];
 	        	refresh_field("items");
 				get_qty_and_item_code_from_bom(items_to_add[i],row.qty,res.message[0]['wip_warehouse'])	
@@ -328,12 +375,12 @@ add_bom_items = function(bom,production_order_item_qty,production_order,warehous
 				$.each(res.message, function(i, d) {
 					var row = frappe.model.add_child(cur_frm.doc, "Stock Entry Detail", "items");
 	                row.item_code = d.item_code;
-	                row.qty = -(d.qty * production_order_item_qty);
+	                row.qty = d.qty * production_order_item_qty;
 	                row.s_warehouse = warehouse;
 	                row.uom = d.stock_uom;
 	                row.stock_uom = d.stock_uom;
 	                row.conversion_factor = 1;
-	                row.transfer_qty = -(d.qty * production_order_item_qty);
+	                row.transfer_qty = d.qty * production_order_item_qty;
 	                row.bom_and_production_order = production_order +"-"+bom;
 	        	});
 	        	refresh_field("items");
