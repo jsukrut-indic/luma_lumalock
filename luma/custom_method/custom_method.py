@@ -181,12 +181,18 @@ def get_po_details(item_code,supplier):
 
 
 @frappe.whitelist()	
-def get_items_from_production_order(production_order):
+def get_items_from_production_order(item_code):
 	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,date_format(t2.planned_start_date,'%d-%m-%Y') as date,
 							(t2.qty - t2.custom_manufactured_qty - t2.produced_qty) as qty 
 							from `tabItem`t1,`tabProduction Order`t2 
-							where t1.item_code = t2.production_item 
-							and t2.name ='{0}' order by date asc""".format(production_order),as_dict=1,debug=1)
+							where t1.item_code = '{0}' and t2.name in (select name from `tabProduction Order` where production_item = '{0}') 
+							order by date asc""".format(item_code),as_dict=1,debug=1)
+# def get_items_from_production_order(production_order):
+# 	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,date_format(t2.planned_start_date,'%d-%m-%Y') as date,
+# 							(t2.qty - t2.custom_manufactured_qty - t2.produced_qty) as qty 
+# 							from `tabItem`t1,`tabProduction Order`t2 
+# 							where t1.item_code = t2.production_item 
+# 							and t2.name ='{0}' order by date asc""".format(production_order),as_dict=1,debug=1)
 
 @frappe.whitelist()	
 def get_items_from_po(supplier,item_code):
@@ -219,6 +225,7 @@ def change_custom_manufactured_qty(production_order,item_code,qty):
 	production_order = frappe.get_doc("Production Order",production_order)
 	if item_code == production_order.production_item:
 		production_order.custom_manufactured_qty = production_order.custom_manufactured_qty + qty
+		production_order.total_manufactured_qty = production_order.custom_manufactured_qty + production_order.produced_qty
 		production_order.save(ignore_permissions = True)
 
 
@@ -228,3 +235,20 @@ def filter_items(doctype, txt, searchfield, start, page_len, filters):
 							`tabPurchase Order`t2 where t1.parent = t2.name 
 							and t2.supplier = '{0}' and t2.docstatus = 1
 							and (item_name like '{txt}' or item_code like '{txt}' )limit 20""".format(filters['supplier'],txt= "%%%s%%" % txt),as_list=1,debug=1)
+
+
+def filter_production_items(doctype, txt, searchfield, start, page_len, filters):
+	return frappe.db.sql("""select distinct production_item from `tabProduction Order`
+							where production_item like '{txt}' limit 20""".format(txt= "%%%s%%" % txt),as_list=1,debug=1)	
+
+
+
+
+
+@frappe.whitelist()
+def get_format_list(naming_series):
+	print naming_series
+	if naming_series == "SINV-":	
+		return 'Sales SINV'
+	if naming_series == "SINV-RET-":	
+		return 'Sales RET'
