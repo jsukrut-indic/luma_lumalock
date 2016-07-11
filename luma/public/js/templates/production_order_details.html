@@ -1,0 +1,31 @@
+<style type="text/css">
+	.items {
+		overflow-y: scroll;
+		max-height: 300px 
+	}
+</style>
+
+<div class="items">
+  <table class="table table-bordered table-condensed">
+	   <thead>
+	     <tr>
+	        <td align="center"><b>Item Code</b></td>
+			<td align="center"><b>Description</b></td>
+			<td align="center"><b>Production Order No.</b></td>
+			<td align="center"><b>Pending Qty</b></td>
+			<td align="center"><b>Date</b></td>
+	      </tr>
+	    </thead>
+	    <tbody>
+	    {% $.each(items, function(i, item){ %}
+	      <tr>
+	        <td align="center">{%= item.production_item || "" %}</td>
+	        <td align="center">{%= item.description || "" %}</td>
+	        <td align="center">{%= item.name || "" %}</td>
+	        <td align="center">{%= item.pending_qty || 0 %}</td>
+	        <td align="center">{%= item.planned_start_date || "" %}</td>
+	      </tr>
+		 {% }); %}
+	    </tbody>
+  </table>
+</div>
