@@ -11,6 +11,7 @@
 	     <tr>
 	        <td align="center"><b>Purchase Order</b></td>
 			<td align="center"><b>Supplier Name</b></td>
+			<td align="center"><b>Qty</b></td>
 			<td align="center"><b>Pending Qty</b></td>
 			<td align="center"><b>Price</b></td>
 			<td align="center"><b>Total</b></td>
@@ -19,15 +20,20 @@
 	    </thead>
 	    <tbody>
 	    {% $.each(items, function(i, item){ %}
+	     {% if(item.pending_qty != 0){ %} 
+
 	      <tr>
-	        <td align="center">{%= item.name || "" %}</td>
+	        <td align="center"><a href="#Form/Purchase Order/{%= item.name || "" %}">{%= item.name || "" %}</a></td>
 	        <td align="center">{%= item.supplier || "" %}</td>
+	        <td align="center">{%= item.qty || 0%}</td>
 	        <td align="center">{%= item.pending_qty || 0%}</td>
 	        <td align="center">{%= item.rate || 0.0 %}</td>
-	        <td align="center">{%= item.total || 0 %}</td>
+	        <td align="center">{%= item.amount || 0 %}</td>
 	        <td align="center">{%= item.transaction_date || "" %}</td>
 	      </tr>
-		 {% }); %}
+		{% } %}
+
+	 {% }); %}
 	    </tbody>
   </table>
 </div>
