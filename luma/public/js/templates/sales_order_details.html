@@ -1,0 +1,33 @@
+<style type="text/css">
+	.stop-items {
+		overflow-y: scroll;
+		max-height: 300px 
+	}
+</style>
+
+<div class="stop-items">
+  <table class="table table-bordered table-condensed">
+	   <thead>
+	     <tr>
+	        <td align="center"><b>Sales Order</b></td>
+			<td align="center"><b>Customer</b></td>
+			<td align="center"><b>Qty</b></td>
+			<td align="center"><b>Price</b></td>
+			<td align="center"><b>Pending Qty</b></td>
+			<td align="center"><b>Delivery Date</b></td>
+	      </tr>
+	    </thead>
+	    {% $.each(items, function(i, item){ %}
+			    <tbody>
+			      <tr id="demo">
+			        <td align="center">{%= item.name || "" %}</td>
+			        <td align="center">{%= item.customer || "" %}</td>
+			        <td align="center">{%= item.qty || 0%}</td>
+			        <td align="center">{%= item.rate || 0.0 %}</td>
+			        <td align="center">{%= item.pending_qty || 0 %}</td>
+			        <td align="center">{%= item.delivery_date || "" %}</td>
+			      </tr>
+			    </tbody>
+		 {% }); %}
+  </table>
+</div>
