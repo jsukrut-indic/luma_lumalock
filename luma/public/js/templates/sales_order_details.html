@@ -1,11 +1,10 @@
 <style type="text/css">
-	.stop-items {
+	.items {
 		overflow-y: scroll;
 		max-height: 300px 
 	}
 </style>
-
-<div class="stop-items">
+<div class="items">
   <table class="table table-bordered table-condensed">
 	   <thead>
 	     <tr>
@@ -17,17 +16,20 @@
 			<td align="center"><b>Delivery Date</b></td>
 	      </tr>
 	    </thead>
+	    <tbody>
 	    {% $.each(items, function(i, item){ %}
-			    <tbody>
-			      <tr id="demo">
-			        <td align="center">{%= item.name || "" %}</td>
-			        <td align="center">{%= item.customer || "" %}</td>
-			        <td align="center">{%= item.qty || 0%}</td>
-			        <td align="center">{%= item.rate || 0.0 %}</td>
-			        <td align="center">{%= item.pending_qty || 0 %}</td>
-			        <td align="center">{%= item.delivery_date || "" %}</td>
-			      </tr>
-			    </tbody>
+	      {% if(item.pending_qty != 0){ %} 
+	      <tr>
+	        <td align="center"><a href="#Form/Sales Order/{%= item.name || "" %}">{%=  item.name || "" %}</a></td>
+	        <td align="center">{%= item.customer || "" %}</td>
+	        <td align="center">{%= item.qty || 0%}</td>
+	        <td align="center">{%= item.rate || 0.0 %}</td>
+	        <td align="center">{%= item.pending_qty || 0 %}</td>
+	        <td align="center">{%= item.delivery_date || "" %}</td>
+	      </tr>
+	       {% } %}
+	      
 		 {% }); %}
+	    </tbody>
   </table>
 </div>

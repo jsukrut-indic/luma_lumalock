@@ -18,13 +18,15 @@
 	    </thead>
 	    <tbody>
 	    {% $.each(items, function(i, item){ %}
+	      {% if(item.pending_qty != 0){ %} 
 	      <tr>
 	        <td align="center">{%= item.production_item || "" %}</td>
 	        <td align="center">{%= item.description || "" %}</td>
-	        <td align="center">{%= item.name || "" %}</td>
+	        <td align="center"><a href="#Form/Production Order/{%= item.name || "" %}">{%= item.name || "" %}</a></td>
 	        <td align="center">{%= item.pending_qty || 0 %}</td>
 	        <td align="center">{%= item.planned_start_date || "" %}</td>
 	      </tr>
+		 {% } %}
 		 {% }); %}
 	    </tbody>
   </table>
