@@ -186,7 +186,7 @@ def get_items_from_production_order(item_code):
 							(t2.qty - t2.custom_manufactured_qty - t2.produced_qty) as qty 
 							from `tabItem`t1,`tabProduction Order`t2 
 							where t1.item_code = '{0}' and t2.name in (select name from `tabProduction Order` where production_item = '{0}') 
-							order by date asc""".format(item_code),as_dict=1,debug=1)
+							order by date asc""".format(item_code),as_dict=1)
 # def get_items_from_production_order(production_order):
 # 	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,date_format(t2.planned_start_date,'%d-%m-%Y') as date,
 # 							(t2.qty - t2.custom_manufactured_qty - t2.produced_qty) as qty 
@@ -200,7 +200,7 @@ def get_items_from_po(supplier,item_code):
 							t1.price_list_rate,((t1.qty - t1.received_qty) * t1.price_list_rate) as amount,t2.transaction_date
 							from `tabPurchase Order Item`t1 ,`tabPurchase Order`t2 
 							where t1.parent = t2.name and t2.supplier = "{0}" 
-							and t1.item_code = "{1}" and t2.docstatus = 1  order by t2.transaction_date asc """.format(supplier,item_code),as_dict=1,debug=1)
+							and t1.item_code = "{1}" and t2.docstatus = 1  order by t2.transaction_date asc """.format(supplier,item_code),as_dict=1)
 
 # @frappe.whitelist()	
 # def update_custom_received_qty(update_po):
@@ -234,12 +234,12 @@ def filter_items(doctype, txt, searchfield, start, page_len, filters):
 	return frappe.db.sql("""select item_code,item_name from `tabPurchase Order Item`t1,
 							`tabPurchase Order`t2 where t1.parent = t2.name 
 							and t2.supplier = '{0}' and t2.docstatus = 1
-							and (item_name like '{txt}' or item_code like '{txt}' )limit 20""".format(filters['supplier'],txt= "%%%s%%" % txt),as_list=1,debug=1)
+							and (item_name like '{txt}' or item_code like '{txt}' )limit 20""".format(filters['supplier'],txt= "%%%s%%" % txt),as_list=1)
 
 
 def filter_production_items(doctype, txt, searchfield, start, page_len, filters):
 	return frappe.db.sql("""select distinct production_item from `tabProduction Order`
-							where production_item like '{txt}' limit 20""".format(txt= "%%%s%%" % txt),as_list=1,debug=1)	
+							where production_item like '{txt}' limit 20""".format(txt= "%%%s%%" % txt),as_list=1)	
 
 
 
