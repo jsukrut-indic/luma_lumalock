@@ -27,8 +27,8 @@
 	        <td align="center">{%= item.supplier || "" %}</td>
 	        <td align="center">{%= item.qty || 0%}</td>
 	        <td align="center">{%= item.pending_qty || 0%}</td>
-	        <td align="center">{%= item.rate || 0.0 %}</td>
-	        <td align="center">{%= item.amount || 0 %}</td>
+	        <td align="center">{%= item.currency %} {%= item.rate || 0.0 %}</td>
+	        <td align="center">{%= item.currency %} {%= item.amount || 0 %}</td>
 	        <td align="center">{%= item.transaction_date || "" %}</td>
 	      </tr>
 		{% } %}
