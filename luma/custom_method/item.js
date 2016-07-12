@@ -1,7 +1,7 @@
 frappe.ui.form.on("Item", "onload", function(frm){
 	if(!cur_frm.doc.__islocal){
 		frappe.call({
-			method: "luma.custom_method.item.get_general_enquiry",
+			method: "luma.custom_method.custom_method.get_general_enquiry",
 			args: {
 				item_code: frm.doc.item_code
 			},
