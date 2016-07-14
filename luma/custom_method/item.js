@@ -1,4 +1,4 @@
-frappe.ui.form.on("Item", "onload", function(frm){
+/*frappe.ui.form.on("Item", "onload", function(frm){
 	if(!cur_frm.doc.__islocal){
 		frappe.call({
 			method: "luma.custom_method.custom_method.get_general_enquiry",
@@ -23,4 +23,4 @@ frappe.ui.form.on("Item", "onload", function(frm){
 			}
 		});
 	}	
-})
+})*/

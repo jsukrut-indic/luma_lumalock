@@ -327,4 +327,26 @@ def get_general_enquiry(item_code):
 		"production_orders": production_orders
 	}
 
-		
+@frappe.whitelist()
+def make_new_po(source_name, target_doc=None):
+	print source_name
+
+	target_doc = get_mapped_doc("Purchase Order", source_name,
+		{
+			"Purchase Order": {
+				"doctype": "Purchase Order",
+			},
+		}, target_doc)
+	
+	target_doc.parent_name = source_name
+	return target_doc
+
+@frappe.whitelist()
+def update_parent_po(po):
+	po = frappe.get_doc("Purchase Order",po)
+	if not po.po_closed:
+		po.update({
+			"po_closed":"Yes"
+			})
+		po.save(ignore_permissions=True)
+	return "parent po updated"		
