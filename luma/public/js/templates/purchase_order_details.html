@@ -1,0 +1,39 @@
+<style type="text/css">
+	.items {
+		overflow-y: scroll;
+		max-height: 300px 
+	}
+</style>
+
+<div class="items">
+  <table class="table table-bordered table-condensed">
+	   <thead>
+	     <tr>
+	        <td align="center"><b>Purchase Order</b></td>
+			<td align="center"><b>Supplier Name</b></td>
+			<td align="center"><b>Qty</b></td>
+			<td align="center"><b>Pending Qty</b></td>
+			<td align="center"><b>Price</b></td>
+			<td align="center"><b>Total</b></td>
+			<td align="center"><b>PO Date</b></td>
+	      </tr>
+	    </thead>
+	    <tbody>
+	    {% $.each(items, function(i, item){ %}
+	     {% if(item.pending_qty != 0){ %} 
+
+	      <tr>
+	        <td align="center"><a href="#Form/Purchase Order/{%= item.name || "" %}">{%= item.name || "" %}</a></td>
+	        <td align="center">{%= item.supplier || "" %}</td>
+	        <td align="center">{%= item.qty || 0%}</td>
+	        <td align="center">{%= item.pending_qty || 0%}</td>
+	        <td align="center">{%= item.currency %} {%= item.rate || 0.0 %}</td>
+	        <td align="center">{%= item.currency %} {%= item.amount || 0 %}</td>
+	        <td align="center">{%= item.transaction_date || "" %}</td>
+	      </tr>
+		{% } %}
+
+	 {% }); %}
+	    </tbody>
+  </table>
+</div>

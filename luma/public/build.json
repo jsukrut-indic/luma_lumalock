@@ -1,0 +1,7 @@
+{
+	"js/luma.min.js": [
+		"public/js/templates/sales_order_details.html",
+		"public/js/templates/purchase_order_details.html",
+		"public/js/templates/production_order_details.html"	
+	]
+}

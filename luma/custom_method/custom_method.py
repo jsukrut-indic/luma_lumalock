@@ -11,6 +11,7 @@ from frappe.desk.notifications import clear_doctype_notifications
 from erpnext.controllers.recurring_document import month_map, get_next_date
 
 from erpnext.controllers.selling_controller import SellingController
+from datetime import datetime, timedelta,date
 
 @frappe.whitelist()
 def make_delivery_note_cs(source_name=None, target_doc=None, item_code=None, test_list=None):
@@ -255,6 +256,78 @@ def get_format_list(naming_series):
 
 
 @frappe.whitelist()
+def get_general_enquiry(item_code):
+	print "get_general_enquiry"
+	sales_orders_query = """ select so.name, 
+					   so.customer, 
+					   soi.qty,
+					   FORMAT(soi.rate, 2) as rate,
+					   (soi.qty-soi.delivered_qty) as pending_qty,
+					   so.delivery_date 
+				from `tabSales Order` so, 
+					 `tabSales Order Item` soi 
+				where so.name=soi.parent 
+					and soi.item_code='%s' and so.docstatus=1 and so.status != "Closed" """%(item_code)
+
+	sales_orders = frappe.db.sql(sales_orders_query, as_dict=True)
+	if len(sales_orders) > 0:
+
+		sales_order = frappe.get_doc("Sales Order",sales_orders[0]['name'])
+		currency = frappe.get_doc("Currency",sales_order.currency)
+		
+		for i in sales_orders:
+			i["currency"] = currency.symbol	
+		print sales_orders,"sales_orders updated"	
+
+
+	purchase_orders_query = """ select po.name,
+					   po.supplier,
+					   poi.qty,
+					   (poi.qty-poi.received_qty) as pending_qty,
+					   FORMAT(poi.rate, 2) as rate,
+					   FORMAT(((poi.qty-poi.received_qty)*poi.rate), 2) as amount,
+					   po.transaction_date
+				from `tabPurchase Order` po, 
+					 `tabPurchase Order Item` poi 
+				where po.name=poi.parent
+					and poi.item_code='%s' and po.docstatus=1 and po.status != "Closed" """%(item_code)
+
+	purchase_orders = frappe.db.sql(purchase_orders_query, as_dict=True)
+	if len(purchase_orders) > 0:
+
+		purchase_order = frappe.get_doc("Purchase Order",purchase_orders[0]['name'])
+		currency = frappe.get_doc("Currency",purchase_order.currency)
+		
+		for i in purchase_orders:
+			i["currency"] = currency.symbol	
+		print purchase_orders,"purchase_orders updated"	
+
+
+
+
+	production_orders_query = """ select pro.production_item,
+								   pro.description,
+								   pro.name,
+								   (pro.qty - pro.custom_manufactured_qty - pro.produced_qty) as pending_qty,
+								   pro.planned_start_date
+								   
+				from `tabProduction Order` as pro 
+				where pro.production_item='%s' and pro.docstatus=1 
+				and pro.status = "Submitted" """%(item_code)
+
+	production_orders = frappe.db.sql(production_orders_query, as_dict=True)
+
+	frappe.errprint(production_orders)
+	for i in production_orders:
+		i["planned_start_date"] = i['planned_start_date'].date()
+
+	return {
+		"sales_orders": sales_orders,
+		"purchase_orders": purchase_orders,
+		"production_orders": production_orders
+	}
+
+@frappe.whitelist()
 def make_new_po(source_name, target_doc=None):
 	print source_name
 
@@ -276,4 +349,4 @@ def update_parent_po(po):
 			"po_closed":"Yes"
 			})
 		po.save(ignore_permissions=True)
-	return "parent po updated"		
+	return "parent po updated"
