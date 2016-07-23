@@ -164,7 +164,9 @@ def get_so_details(item_code,customer):
 	return {
 	"get_test_data": frappe.db.sql("""select so.name, si.qty, si.rate, si.delivered_qty, so.delivery_date, si.stock_uom, c.symbol, si.item_code 
 		from `tabSales Order` as so, `tabSales Order Item` si, tabCurrency c 
-		where si.parent=so.name and c.name=so.currency and so.docstatus=1 and so.customer='%s' and si.item_code='%s' and si.delivered_qty<si.qty order by so.delivery_date"""%(customer,item_code), as_list=1)
+		where si.parent=so.name and c.name=so.currency and so.docstatus=1
+		and so.status != "Closed"
+		and so.customer='%s' and si.item_code='%s' and si.delivered_qty<si.qty order by so.delivery_date"""%(customer,item_code), as_list=1)
 	}
 
 @frappe.whitelist()
@@ -229,9 +231,9 @@ def change_custom_manufactured_qty(production_order,item_code,qty):
 		production_order.total_manufactured_qty = production_order.custom_manufactured_qty + production_order.produced_qty
 		production_order.save(ignore_permissions = True)
 
-
+@frappe.whitelist()
 def filter_items(doctype, txt, searchfield, start, page_len, filters):
-	print filters['supplier']
+	print filters,"filterssdfgbjkskjsdffkjhfsdkjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
 	return frappe.db.sql("""select item_code,item_name from `tabPurchase Order Item`t1,
 							`tabPurchase Order`t2 where t1.parent = t2.name 
 							and t2.supplier = '{0}' and t2.docstatus = 1
@@ -241,9 +243,6 @@ def filter_items(doctype, txt, searchfield, start, page_len, filters):
 def filter_production_items(doctype, txt, searchfield, start, page_len, filters):
 	return frappe.db.sql("""select distinct production_item from `tabProduction Order`
 							where production_item like '{txt}' limit 20""".format(txt= "%%%s%%" % txt),as_list=1)	
-
-
-
 
 
 @frappe.whitelist()
