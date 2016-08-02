@@ -34,6 +34,7 @@ def item_logistic(doc,method):
 	except Exception, e:
 		frappe.throw(e)	
 
+
 def packing_weight(doc,method):
 	try:
 		gw = 0

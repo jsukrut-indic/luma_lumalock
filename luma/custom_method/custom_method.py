@@ -164,7 +164,9 @@ def get_so_details(item_code,customer):
 	return {
 	"get_test_data": frappe.db.sql("""select so.name, si.qty, si.rate, si.delivered_qty, so.delivery_date, si.stock_uom, c.symbol, si.item_code 
 		from `tabSales Order` as so, `tabSales Order Item` si, tabCurrency c 
-		where si.parent=so.name and c.name=so.currency and so.docstatus=1 and so.customer='%s' and si.item_code='%s' and si.delivered_qty<si.qty order by so.delivery_date"""%(customer,item_code), as_list=1)
+		where si.parent=so.name and c.name=so.currency and so.docstatus=1
+		and so.status != "Closed"
+		and so.customer='%s' and si.item_code='%s' and si.delivered_qty<si.qty order by so.delivery_date"""%(customer,item_code), as_list=1)
 	}
 
 @frappe.whitelist()
@@ -187,7 +189,7 @@ def get_items_from_production_order(item_code):
 							(t2.qty - t2.custom_manufactured_qty - t2.produced_qty) as qty 
 							from `tabItem`t1,`tabProduction Order`t2 
 							where t1.item_code = '{0}' and t2.name in (select name from `tabProduction Order` where production_item = '{0}') 
-							order by date asc""".format(item_code),as_dict=1,debug=1)
+							order by date asc""".format(item_code),as_dict=1)
 # def get_items_from_production_order(production_order):
 # 	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,date_format(t2.planned_start_date,'%d-%m-%Y') as date,
 # 							(t2.qty - t2.custom_manufactured_qty - t2.produced_qty) as qty 
@@ -201,7 +203,7 @@ def get_items_from_po(supplier,item_code):
 							t1.price_list_rate,((t1.qty - t1.received_qty) * t1.price_list_rate) as amount,t2.transaction_date
 							from `tabPurchase Order Item`t1 ,`tabPurchase Order`t2 
 							where t1.parent = t2.name and t2.supplier = "{0}" 
-							and t1.item_code = "{1}" and t2.docstatus = 1  order by t2.transaction_date asc """.format(supplier,item_code),as_dict=1,debug=1)
+							and t1.item_code = "{1}" and t2.docstatus = 1  order by t2.transaction_date asc """.format(supplier,item_code),as_dict=1)
 
 # @frappe.whitelist()	
 # def update_custom_received_qty(update_po):
@@ -229,21 +231,18 @@ def change_custom_manufactured_qty(production_order,item_code,qty):
 		production_order.total_manufactured_qty = production_order.custom_manufactured_qty + production_order.produced_qty
 		production_order.save(ignore_permissions = True)
 
-
+@frappe.whitelist()
 def filter_items(doctype, txt, searchfield, start, page_len, filters):
-	print filters['supplier']
+	print filters,"filterssdfgbjkskjsdffkjhfsdkjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
 	return frappe.db.sql("""select item_code,item_name from `tabPurchase Order Item`t1,
 							`tabPurchase Order`t2 where t1.parent = t2.name 
 							and t2.supplier = '{0}' and t2.docstatus = 1
-							and (item_name like '{txt}' or item_code like '{txt}' )limit 20""".format(filters['supplier'],txt= "%%%s%%" % txt),as_list=1,debug=1)
+							and (item_name like '{txt}' or item_code like '{txt}' )limit 20""".format(filters['supplier'],txt= "%%%s%%" % txt),as_list=1)
 
 
 def filter_production_items(doctype, txt, searchfield, start, page_len, filters):
 	return frappe.db.sql("""select distinct production_item from `tabProduction Order`
-							where production_item like '{txt}' limit 20""".format(txt= "%%%s%%" % txt),as_list=1,debug=1)	
-
-
-
+							where production_item like '{txt}' limit 20""".format(txt= "%%%s%%" % txt),as_list=1)	
 
 
 @frappe.whitelist()
@@ -255,10 +254,9 @@ def get_format_list(naming_series):
 		return 'Sales RET'
 
 
-
-
 @frappe.whitelist()
 def get_general_enquiry(item_code):
+	print "get_general_enquiry"
 	sales_orders_query = """ select so.name, 
 					   so.customer, 
 					   soi.qty,
@@ -268,7 +266,7 @@ def get_general_enquiry(item_code):
 				from `tabSales Order` so, 
 					 `tabSales Order Item` soi 
 				where so.name=soi.parent 
-					and soi.item_code='%s' and so.docstatus=1"""%(item_code)
+					and soi.item_code='%s' and so.docstatus=1 and so.status != "Closed" """%(item_code)
 
 	sales_orders = frappe.db.sql(sales_orders_query, as_dict=True)
 	if len(sales_orders) > 0:
@@ -291,7 +289,7 @@ def get_general_enquiry(item_code):
 				from `tabPurchase Order` po, 
 					 `tabPurchase Order Item` poi 
 				where po.name=poi.parent
-					and poi.item_code='%s' and po.docstatus=1"""%(item_code)
+					and poi.item_code='%s' and po.docstatus=1 and po.status != "Closed" """%(item_code)
 
 	purchase_orders = frappe.db.sql(purchase_orders_query, as_dict=True)
 	if len(purchase_orders) > 0:
@@ -313,7 +311,8 @@ def get_general_enquiry(item_code):
 								   pro.planned_start_date
 								   
 				from `tabProduction Order` as pro 
-				where pro.production_item='%s' and pro.docstatus=1 """%(item_code)
+				where pro.production_item='%s' and pro.docstatus=1 
+				and pro.status = "Submitted" """%(item_code)
 
 	production_orders = frappe.db.sql(production_orders_query, as_dict=True)
 
@@ -349,4 +348,4 @@ def update_parent_po(po):
 			"po_closed":"Yes"
 			})
 		po.save(ignore_permissions=True)
-	return "parent po updated"		
+	return "parent po updated"
