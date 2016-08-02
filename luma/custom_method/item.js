@@ -41,7 +41,7 @@
 // 				}
 // }
 
-frappe.ui.form.on("Item", {
+/*frappe.ui.form.on("Item", {
 	refresh: function(frm) {
 		frm.fields_dict['outer_box_code'].get_query = function(doc) {
 			return {
@@ -53,6 +53,11 @@ frappe.ui.form.on("Item", {
 				filters: { "item_group": "Box"}
 			}
 		}
+
+	},
+
+
+});*/
 		// if frm.fields_dict['item_group']=="Box" {
 		// 	cur_frm.set_df_property("inner_box_code", "reqd", false);
 		// 	cur_frm.set_df_property("inner_box_pcs", "reqd", false);
@@ -63,8 +68,3 @@ frappe.ui.form.on("Item", {
 	
 		// eval:doc.item_group=="Box"
 		// cur_frm.set_df_property("fieldname", "reqd", true);
-
-	},
-
-
-});
