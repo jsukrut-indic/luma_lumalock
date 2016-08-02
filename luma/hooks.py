@@ -74,13 +74,14 @@ fixtures =['Custom Field', "Property Setter","Custom Script"]
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
-# 	"*": {
-# 		"on_update": "method",
-# 		"on_cancel": "method",
-# 		"on_trash": "method"
-#	}
-# }
+doc_events = {
+	"Delivery Note": {
+		"validate":"luma.custom_method.item.item_logistic"
+	},
+	"Packing Slip": {
+		"validate":"luma.custom_method.item.packing_weight"
+	}
+}
 
 # Scheduled Tasks
 # ---------------
