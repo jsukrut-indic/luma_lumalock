@@ -23,48 +23,28 @@
 // 			}
 // 		});
 // 	}	
+// });
+
+// frappe.ui.form.on("Item", {
+// 	refresh: function(frm) {
+// 		frm.fields_dict['outer_box_code'].get_query = function(doc) {
+// 			return {
+// 				filters: { "item_group": "Box"}
+// 			}
+// 		}
+// 		frm.fields_dict['inner_box_code'].get_query = function(doc) {
+// 			return {
+// 				filters: { "item_group": "Box"}
+// 			}
+// 		}
+
+// 	},
+// });
+
+// frappe.ui.form.on("Item", "item_group", function(frm){
+// 	console.log("int Item ")
+// 	if(cur_frm.doc.item_group != "Box"){
+// 		cur_frm.set_df_property("outer_box_code","reqd",1)
+// 		cur_frm.set_df_property("inner_box_code","reqd",1)
+// 	}
 // })
-
-// $.extend(erpnext.item, {
-// 	setup_queries: function(frm) {		
-// 		frm.fields_dict['Outer Box Code'].get_query = function(doc) {
-// 					return {
-// 						filters: { "item group": "Box"}
-// 					}
-// 				}
-
-
-// 		frm.fields_dict['Inner Box Code'].get_query = function(doc) {
-// 					return {
-// 						filters: { "item group": "Box"}
-// 					}
-// 				}
-// }
-
-/*frappe.ui.form.on("Item", {
-	refresh: function(frm) {
-		frm.fields_dict['outer_box_code'].get_query = function(doc) {
-			return {
-				filters: { "item_group": "Box"}
-			}
-		}
-		frm.fields_dict['inner_box_code'].get_query = function(doc) {
-			return {
-				filters: { "item_group": "Box"}
-			}
-		}
-
-	},
-
-
-});*/
-		// if frm.fields_dict['item_group']=="Box" {
-		// 	cur_frm.set_df_property("inner_box_code", "reqd", false);
-		// 	cur_frm.set_df_property("inner_box_pcs", "reqd", false);
-		// 	cur_frm.set_df_property("outer_box_code", "reqd", false);
-		// 	cur_frm.set_df_property("outer_box_pcs", "reqd", false);
-		// }
-	
-	
-		// eval:doc.item_group=="Box"
-		// cur_frm.set_df_property("fieldname", "reqd", true);
