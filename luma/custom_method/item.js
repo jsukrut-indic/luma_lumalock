@@ -46,5 +46,17 @@
 // 	if(cur_frm.doc.item_group != "Box"){
 // 		cur_frm.set_df_property("outer_box_code","reqd",1)
 // 		cur_frm.set_df_property("inner_box_code","reqd",1)
+// 		cur_frm.set_df_property("outer_box_code","hidden",0)
+// 		cur_frm.set_df_property("inner_box_code","hidden",0)
+// 		cur_frm.set_df_property("outer_box_pcs","hidden",0)
+// 		cur_frm.set_df_property("inner_box_pcs","hidden",0)
+// 	}
+// 	if(cur_frm.doc.item_group == "Box"){
+// 		cur_frm.set_df_property("outer_box_code","reqd",0)
+// 		cur_frm.set_df_property("inner_box_code","reqd",0)
+// 		cur_frm.set_df_property("outer_box_code","hidden",1)
+// 		cur_frm.set_df_property("inner_box_code","hidden",1)
+// 		cur_frm.set_df_property("outer_box_pcs","hidden",1)
+// 		cur_frm.set_df_property("inner_box_pcs","hidden",1)
 // 	}
 // })
