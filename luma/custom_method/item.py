@@ -22,7 +22,7 @@ def item_logistic(doc,method):
 			
 				if outer_box_length >= 0 and outer_box_width >=0 and outer_box_height >= 0: 
 					total_volume = total_boxes * ( outer_box_length * outer_box_width * outer_box_height)
-					item.total_volume = total_volume
+					item.total_volume = total_volume/1000
 
 				if net_weight >= 0:
 					inner_box_weight = frappe.db.get_value("Item", inner_box_code,["net_weight"]) if inner_box_code else 0
@@ -46,7 +46,6 @@ def packing_weight(doc,method):
 		if doc.items:
 			for item in doc.items:
 				gw += item.total_weight if item.total_weight > 0 else 0
-		print gw,"gwwwwwwwwwwwwwwwwwww"		
 		doc.gross_weight_pkg = gw
 				
 		
