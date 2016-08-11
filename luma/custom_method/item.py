@@ -13,9 +13,9 @@ def item_logistic(doc,method):
 			inner_box_pcs, outer_box_pcs, net_weight, outer_box_code, inner_box_code = frappe.db.get_value("Item",
 						 item.item_code,["inner_box_pcs", "outer_box_pcs", "net_weight", "outer_box_code","inner_box_code" ])
 
-			total_boxes = math.ceil(item.qty / outer_box_pcs) if outer_box_pcs > 0 else 0
+			total_boxes = math.ceil(item.qty / outer_box_pcs) if outer_box_pcs > 0 else 1
 			item.total_boxes = total_boxes
-			inner_box_pcs = inner_box_pcs if inner_box_pcs > 0 else 0	
+			inner_box_pcs = inner_box_pcs if inner_box_pcs > 0 else 1	
 			
 			if outer_box_code:
 				outer_box_weight, outer_box_length, outer_box_width, outer_box_height = frappe.db.get_value("Item", outer_box_code,["net_weight", "length", "width", "height"])
