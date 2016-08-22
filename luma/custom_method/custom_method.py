@@ -226,10 +226,13 @@ def update_custom_manufactured_qty(update_production_order):
 		
 def change_custom_manufactured_qty(production_order,item_code,qty):
 	production_order = frappe.get_doc("Production Order",production_order)
-	if item_code == production_order.production_item:
+	if item_code == production_order.production_item and (qty <= float(production_order.qty) - float(production_order.total_manufactured_qty)):
 		production_order.custom_manufactured_qty = production_order.custom_manufactured_qty + qty
 		production_order.total_manufactured_qty = production_order.custom_manufactured_qty + production_order.produced_qty
 		production_order.save(ignore_permissions = True)
+	else{
+		frappe.throw(_("Manufactured Qty > Production Order QTY"))
+	}	
 
 @frappe.whitelist()
 def filter_items(doctype, txt, searchfield, start, page_len, filters):
@@ -242,8 +245,9 @@ def filter_items(doctype, txt, searchfield, start, page_len, filters):
 
 def filter_production_items(doctype, txt, searchfield, start, page_len, filters):
 	return frappe.db.sql("""select distinct production_item from `tabProduction Order`
-							where production_item like '{txt}' limit 20""".format(txt= "%%%s%%" % txt),as_list=1)	
-
+							where docstatus = 1 and status != "Cancelled" and status != "Stopped"
+							and qty - total_manufactured_qty > 0
+							and production_item like '{txt}' limit 20 """.format(txt= "%%%s%%" % txt),as_list=1)	
 
 @frappe.whitelist()
 def get_format_list(naming_series):
