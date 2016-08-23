@@ -186,10 +186,12 @@ def get_po_details(item_code,supplier):
 @frappe.whitelist()	
 def get_items_from_production_order(item_code):
 	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,date_format(t2.planned_start_date,'%d-%m-%Y') as date,
-							(t2.qty - t2.custom_manufactured_qty - t2.produced_qty) as qty 
+							(t2.qty - t2.produced_qty) as qty 
 							from `tabItem`t1,`tabProduction Order`t2 
-							where t1.item_code = '{0}' and t2.name in (select name from `tabProduction Order` where production_item = '{0}') 
+							where t1.item_code = '{0}' and t2.name in (select name from `tabProduction Order` where production_item = '{0}' 
+							and docstatus = 1 and status != "Cancelled" and status != "Stopped") 
 							order by date asc""".format(item_code),as_dict=1)
+
 # def get_items_from_production_order(production_order):
 # 	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,date_format(t2.planned_start_date,'%d-%m-%Y') as date,
 # 							(t2.qty - t2.custom_manufactured_qty - t2.produced_qty) as qty 
@@ -218,21 +220,21 @@ def get_items_from_po(supplier,item_code):
 # 			row.custom_received_qty = row.custom_received_qty + qty
 # 			row.save(ignore_permissions = True)
 
-@frappe.whitelist()
-def update_custom_manufactured_qty(update_production_order):
-	update_production_order = json.loads(update_production_order)
-	for i in update_production_order:
-		change_custom_manufactured_qty(i['production_order'],i['item_code'],i['qty'])
+# @frappe.whitelist()
+# def update_custom_manufactured_qty(update_production_order):
+# 	update_production_order = json.loads(update_production_order)
+# 	for i in update_production_order:
+# 		change_custom_manufactured_qty(i['production_order'],i['item_code'],i['qty'])
 		
-def change_custom_manufactured_qty(production_order,item_code,qty):
-	production_order = frappe.get_doc("Production Order",production_order)
-	if item_code == production_order.production_item and (qty <= float(production_order.qty) - float(production_order.total_manufactured_qty)):
-		production_order.custom_manufactured_qty = production_order.custom_manufactured_qty + qty
-		production_order.total_manufactured_qty = production_order.custom_manufactured_qty + production_order.produced_qty
-		production_order.save(ignore_permissions = True)
-	else{
-		frappe.throw(_("Manufactured Qty > Production Order QTY"))
-	}	
+# def change_custom_manufactured_qty(production_order,item_code,qty):
+# 	production_order = frappe.get_doc("Production Order",production_order)
+# 	if item_code == production_order.production_item and (qty <= float(production_order.qty) - float(production_order.total_manufactured_qty)):
+# 		print "in my cond"
+# 		production_order.custom_manufactured_qty = production_order.custom_manufactured_qty + qty
+# 		production_order.total_manufactured_qty = production_order.custom_manufactured_qty + production_order.produced_qty
+# 		production_order.save(ignore_permissions = True)
+# 	else:
+# 		frappe.throw(_("Manufactured Qty > Production Order QTY"))
 
 @frappe.whitelist()
 def filter_items(doctype, txt, searchfield, start, page_len, filters):
@@ -246,7 +248,7 @@ def filter_items(doctype, txt, searchfield, start, page_len, filters):
 def filter_production_items(doctype, txt, searchfield, start, page_len, filters):
 	return frappe.db.sql("""select distinct production_item from `tabProduction Order`
 							where docstatus = 1 and status != "Cancelled" and status != "Stopped"
-							and qty - total_manufactured_qty > 0
+							and qty - produced_qty > 0
 							and production_item like '{txt}' limit 20 """.format(txt= "%%%s%%" % txt),as_list=1)	
 
 @frappe.whitelist()
@@ -311,7 +313,7 @@ def get_general_enquiry(item_code):
 	production_orders_query = """ select pro.production_item,
 								   pro.description,
 								   pro.name,
-								   (pro.qty - pro.custom_manufactured_qty - pro.produced_qty) as pending_qty,
+								   (pro.qty - pro.produced_qty) as pending_qty,
 								   pro.planned_start_date
 								   
 				from `tabProduction Order` as pro 
