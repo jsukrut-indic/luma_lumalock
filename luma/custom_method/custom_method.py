@@ -188,7 +188,8 @@ def get_items_from_production_order(item_code):
 	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,date_format(t2.planned_start_date,'%d-%m-%Y') as date,
 							(t2.qty - t2.produced_qty) as qty 
 							from `tabItem`t1,`tabProduction Order`t2 
-							where t1.item_code = '{0}' and t2.name in (select name from `tabProduction Order` where production_item = '{0}') 
+							where t1.item_code = '{0}' and t2.name in (select name from `tabProduction Order` where production_item = '{0}' 
+							and docstatus = 1 and status != "Cancelled" and status != "Stopped") 
 							order by date asc""".format(item_code),as_dict=1)
 
 # def get_items_from_production_order(production_order):
