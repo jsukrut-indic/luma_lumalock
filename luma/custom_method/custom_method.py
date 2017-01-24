@@ -318,7 +318,7 @@ def get_general_enquiry(item_code):
 								   
 				from `tabProduction Order` as pro 
 				where pro.production_item='%s' and pro.docstatus=1 
-				and pro.status = "Submitted" """%(item_code)
+				and pro.status in ("Submitted","In Process") """%(item_code)
 
 	production_orders = frappe.db.sql(production_orders_query, as_dict=True)
 
