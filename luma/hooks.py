@@ -56,7 +56,7 @@ app_include_js = "/assets/js/luma.min.js"
 # notification_config = "luma.notifications.get_notification_config"
 
 # Add Fixtures
-fixtures =['Custom Field', "Property Setter","Custom Script","Print Format"]
+fixtures =['Custom Field', "Property Setter","Custom Script","Print Format", "Role"]
 
 # Permissions
 # -----------
