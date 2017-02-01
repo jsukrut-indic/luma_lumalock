@@ -1,5 +1,5 @@
 $.extend(frappe.treeview_settings["BOM"], {
-	get_tree_nodes: 'luma.custom_method.get_bom_children',
+	get_tree_nodes: 'luma.custom_method.custom_method.get_bom_children',
 	onrender: function(node) {
 		var bom_qty_html = '<div class="pull-right text-muted small">\
 				<div class="text-right bom-qty %(label_class)s">%(stock)s</div>\
