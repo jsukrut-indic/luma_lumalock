@@ -355,3 +355,37 @@ def update_parent_po(po):
 			})
 		po.save(ignore_permissions=True)
 	return "parent po updated"
+
+
+
+@frappe.whitelist()
+def get_bom_children():
+	if frappe.form_dict.parent:
+		response = frappe.db.sql("""select item_code,
+			bom_no as value, qty,
+			if(ifnull(bom_no, "")!="", 1, 0) as expandable
+			from `tabBOM Item`
+			where parent=%s
+			order by idx
+			""", frappe.form_dict.parent, as_dict=True)
+
+		for row in response:
+			if not row.get("expandable", 0):
+				row["stock"] = frappe.db.get_value("Bin", {"warehouse":"Luma Products - SWIE", \
+					"item_code":row.get("item_code")}, "ifnull(round(actual_qty, 2), 0)") or 0.00
+				row["remaining_qty"] = get_remaining_qty(row.get("item_code"))
+		return response
+
+def get_remaining_qty(item_code):
+	count = frappe.db.sql(""" select 
+						sum(`tabPurchase Order Item`.stock_qty - (ifnull(`tabPurchase Order Item`.received_qty, 0) * 
+						ifnull(`tabPurchase Order Item`.conversion_factor, 0)) ) as qty_to_receive
+					from
+						`tabPurchase Order`, `tabPurchase Order Item`
+					where
+						`tabPurchase Order Item`.`parent` = `tabPurchase Order`.`name`
+						and `tabPurchase Order`.docstatus = 1
+						and `tabPurchase Order`.status not in ("Stopped", "Closed")
+						and `tabPurchase Order Item`.item_code = '{0}' """
+						.format(frappe.db.escape(item_code)), as_dict=1)
+	return count and count[0].get("qty_to_receive", 0) or 0

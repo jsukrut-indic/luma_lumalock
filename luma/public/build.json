@@ -3,5 +3,8 @@
 		"public/js/templates/sales_order_details.html",
 		"public/js/templates/purchase_order_details.html",
 		"public/js/templates/production_order_details.html"	
+	],
+	"css/luma.min.css":[
+		"public/css/custom_bom_tree.css"
 	]
 }
