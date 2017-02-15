@@ -65,10 +65,12 @@ def make_delivery_note_cs(source_name=None, target_doc=None, item_code=None, tes
 	return target_doc
 
 @frappe.whitelist()
-def make_purchase_receipt(source_name=None, target_doc=None, item_code=None, test_list=None):
-	test_list_json = json.loads(test_list)
-	for source_name in test_list_json:
+def make_purchase_receipt(source_name=None, target_doc=None, item_code=None, po_list=None, po_row_list=None):
+	po_list = json.loads(po_list)
+	po_row_list = json.loads(po_row_list)
+	for po_no in set(po_list):
 		def set_missing_values(source, target):
+
 			target.ignore_pricing_rule = 1
 			target.run_method("set_missing_values")
 			target.run_method("calculate_taxes_and_totals")
@@ -79,8 +81,8 @@ def make_purchase_receipt(source_name=None, target_doc=None, item_code=None, tes
 			target.amount = (flt(obj.qty) - flt(obj.received_qty)) * flt(obj.rate)
 			target.base_amount = (flt(obj.qty) - flt(obj.received_qty)) * \
 				flt(obj.rate) * flt(source_parent.conversion_rate)
-
-		target_doc = get_mapped_doc("Purchase Order", source_name,	{
+	
+		target_doc = get_mapped_doc("Purchase Order", po_no,	{
 			"Purchase Order": {
 				"doctype": "Purchase Receipt",
 				"validation": {
@@ -90,12 +92,14 @@ def make_purchase_receipt(source_name=None, target_doc=None, item_code=None, tes
 			"Purchase Order Item": {
 				"doctype": "Purchase Receipt Item",
 				"field_map": {
-					"name": "prevdoc_detail_docname",
-					"parent": "prevdoc_docname",
-					"parenttype": "prevdoc_doctype",
+					"name": "purchase_order_item",
+					"parent": "purchase_order",
 				},
 				"postprocess": update_item,
-				"condition": lambda doc: abs(doc.received_qty) < abs(doc.qty) and doc.delivered_by_supplier!=1 and doc.item_code==item_code
+				"condition": lambda doc: abs(doc.received_qty) < abs(doc.qty) \
+							and doc.delivered_by_supplier!=1 \
+							and doc.item_code==item_code \
+							and doc.name in po_row_list
 			},
 			"Purchase Taxes and Charges": {
 				"doctype": "Purchase Taxes and Charges",
@@ -170,12 +174,11 @@ def get_so_details(item_code,customer):
 	}
 
 @frappe.whitelist()
-def get_po_details(item_code,supplier):
+def get_po_details(item_code, supplier):
 	if not supplier:
 		frappe.throw("Please select Supplier")
-
 	return {
-	"get_test_data": frappe.db.sql("""select po.name, pi.qty, pi.rate, ( pi.qty - pi.received_qty), po.transaction_date, pi.stock_uom, pi.item_code 
+	"get_test_data": frappe.db.sql("""select po.name, pi.qty, pi.rate, ( pi.qty - pi.received_qty), po.transaction_date, pi.stock_uom, pi.item_code, pi.name as poi_row_name 
 		from `tabPurchase Order` as po, `tabPurchase Order Item` pi, tabCurrency c 
 		where pi.parent=po.name and c.name=po.currency and po.docstatus=1 and po.supplier='%s' and pi.item_code='%s' and pi.received_qty<pi.qty order by po.transaction_date"""%(supplier,item_code), as_list=1)
 	}
@@ -238,7 +241,6 @@ def get_items_from_po(supplier,item_code):
 
 @frappe.whitelist()
 def filter_items(doctype, txt, searchfield, start, page_len, filters):
-	print filters,"filterssdfgbjkskjsdffkjhfsdkjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
 	return frappe.db.sql("""select item_code,item_name from `tabPurchase Order Item`t1,
 							`tabPurchase Order`t2 where t1.parent = t2.name 
 							and t2.supplier = '{0}' and t2.docstatus = 1
@@ -253,7 +255,6 @@ def filter_production_items(doctype, txt, searchfield, start, page_len, filters)
 
 @frappe.whitelist()
 def get_format_list(naming_series):
-	print naming_series
 	if naming_series == "SINV-":	
 		return 'Sales SINV'
 	if naming_series == "SINV-RET-":	
@@ -262,7 +263,6 @@ def get_format_list(naming_series):
 
 @frappe.whitelist()
 def get_general_enquiry(item_code):
-	print "get_general_enquiry"
 	sales_orders_query = """ select so.name, 
 					   so.customer, 
 					   soi.qty,
@@ -281,8 +281,7 @@ def get_general_enquiry(item_code):
 		currency = frappe.get_doc("Currency",sales_order.currency)
 		
 		for i in sales_orders:
-			i["currency"] = currency.symbol	
-		print sales_orders,"sales_orders updated"	
+			i["currency"] = currency.symbol
 
 
 	purchase_orders_query = """ select po.name,
