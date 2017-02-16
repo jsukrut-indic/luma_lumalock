@@ -180,7 +180,9 @@ def get_po_details(item_code, supplier):
 	return {
 	"get_test_data": frappe.db.sql("""select po.name, pi.qty, pi.rate, ( pi.qty - pi.received_qty), po.transaction_date, pi.stock_uom, pi.item_code, pi.name as poi_row_name 
 		from `tabPurchase Order` as po, `tabPurchase Order Item` pi, tabCurrency c 
-		where pi.parent=po.name and c.name=po.currency and po.docstatus=1 and po.supplier='%s' and pi.item_code='%s' and pi.received_qty<pi.qty order by po.transaction_date"""%(supplier,item_code), as_list=1)
+		where pi.parent=po.name and c.name=po.currency and po.docstatus=1 
+		and po.supplier='%s' and pi.item_code='%s' and pi.received_qty<pi.qty 
+		and po.status != 'Closed' order by po.transaction_date"""%(supplier,item_code), as_list=1)
 	}
 
 
