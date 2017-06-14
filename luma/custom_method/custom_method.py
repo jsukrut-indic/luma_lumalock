@@ -413,11 +413,10 @@ def get_outerbox_item(item_code):
 
 @frappe.whitelist()
 def set_item_values(doc, method):
-	print "INSIDE HOOKS ___________________"
 	for row in doc.items:
 		if row.item_code:
-			row.outer_box_qty = flt(row.qty/row.outer_box_pcs)
-			row.inner_box_qty = flt(row.qty/row.inner_box_pcs)
-			row.total_volume = flt(row.length*row.width*row.height*row.outer_box_qty)
-			row.total_net_weight = flt(row.item_net_weight1/row.qty)
-			row.total_gross_weight1 = flt(row.qty*row.item_net_weight1 + (row.outer_box_qty*row.outer_box_weight)+(row.inner_box_qty*row.inner_box_weight))
+			row.outer_box_qty = round(flt(row.qty/row.outer_box_pcs),2)
+			row.inner_box_qty = round(flt(row.qty/row.inner_box_pcs),2)
+			row.total_volume = round(flt(row.length*row.width*row.height*row.outer_box_qty),2)
+			row.total_net_weight = round(flt(row.item_net_weight1/row.qty),2)
+			row.total_gross_weight1 = round(flt(row.qty*row.item_net_weight1 + (row.outer_box_qty*row.outer_box_weight)+(row.inner_box_qty*row.inner_box_weight)),2)
