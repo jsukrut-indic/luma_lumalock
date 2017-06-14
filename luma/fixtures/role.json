@@ -1,5 +1,60 @@
 [
  {
+  "desk_access": 1, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Role", 
+  "modified": "2017-02-14 19:02:49.065646", 
+  "name": "Knowledge Base Contributor", 
+  "role_name": "Knowledge Base Contributor"
+ }, 
+ {
+  "desk_access": 1, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Role", 
+  "modified": "2017-02-14 19:02:49.067823", 
+  "name": "Knowledge Base Editor", 
+  "role_name": "Knowledge Base Editor"
+ }, 
+ {
+  "desk_access": 1, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Role", 
+  "modified": "2017-02-14 19:07:29.914447", 
+  "name": "Fleet Manager", 
+  "role_name": "Fleet Manager"
+ }, 
+ {
+  "desk_access": 1, 
+  "disabled": 1, 
+  "docstatus": 0, 
+  "doctype": "Role", 
+  "modified": "2017-02-15 14:01:55.274922", 
+  "name": "Academics User", 
+  "role_name": "Academics User"
+ }, 
+ {
+  "desk_access": 1, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Role", 
+  "modified": "2017-02-14 19:10:46.991697", 
+  "name": "Instructor", 
+  "role_name": "Instructor"
+ }, 
+ {
+  "desk_access": 0, 
+  "disabled": 0, 
+  "docstatus": 0, 
+  "doctype": "Role", 
+  "modified": "2017-02-14 19:11:37.568712", 
+  "name": "Student", 
+  "role_name": "Student"
+ }, 
+ {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -8,6 +63,7 @@
   "role_name": "System Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -16,6 +72,7 @@
   "role_name": "All"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -24,6 +81,7 @@
   "role_name": "Administrator"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -32,6 +90,7 @@
   "role_name": "Guest"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -40,6 +99,7 @@
   "role_name": "Website Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -48,6 +108,7 @@
   "role_name": "Blogger"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -56,6 +117,7 @@
   "role_name": "Sales User"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -64,6 +126,7 @@
   "role_name": "Accounts User"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -72,6 +135,7 @@
   "role_name": "Purchase User"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -80,6 +144,7 @@
   "role_name": "Report Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -88,6 +153,7 @@
   "role_name": "Accounts Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -96,6 +162,7 @@
   "role_name": "Employee"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -104,6 +171,7 @@
   "role_name": "Stock User"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -112,6 +180,7 @@
   "role_name": "Purchase Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -120,6 +189,7 @@
   "role_name": "Purchase Master Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -128,6 +198,7 @@
   "role_name": "Auditor"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -136,6 +207,7 @@
   "role_name": "Sales Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -144,6 +216,7 @@
   "role_name": "Sales Master Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -152,6 +225,7 @@
   "role_name": "Supplier"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -160,6 +234,7 @@
   "role_name": "Customer"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -168,6 +243,7 @@
   "role_name": "Newsletter Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -176,14 +252,16 @@
   "role_name": "Quality Manager"
  }, 
  {
-  "disabled": 0, 
+  "desk_access": 0, 
+  "disabled": 1, 
   "docstatus": 0, 
   "doctype": "Role", 
-  "modified": "2016-02-10 18:35:25.675754", 
+  "modified": "2017-02-15 14:01:55.170058", 
   "name": "Manufacturing Manager", 
   "role_name": "Manufacturing Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -192,6 +270,7 @@
   "role_name": "Stock Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -200,6 +279,7 @@
   "role_name": "Projects User"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -208,6 +288,7 @@
   "role_name": "Projects Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -216,6 +297,7 @@
   "role_name": "Maintenance User"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -224,6 +306,7 @@
   "role_name": "Maintenance Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -232,6 +315,7 @@
   "role_name": "Item Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -240,6 +324,7 @@
   "role_name": "HR User"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -248,6 +333,7 @@
   "role_name": "HR Manager"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -256,6 +342,7 @@
   "role_name": "Leave Approver"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -264,14 +351,16 @@
   "role_name": "Expense Approver"
  }, 
  {
-  "disabled": 0, 
+  "desk_access": 0, 
+  "disabled": 1, 
   "docstatus": 0, 
   "doctype": "Role", 
-  "modified": "2016-02-10 18:35:30.931091", 
+  "modified": "2017-02-15 14:01:55.053152", 
   "name": "Manufacturing User", 
   "role_name": "Manufacturing User"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -280,6 +369,7 @@
   "role_name": "Office Coordinator"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -288,6 +378,7 @@
   "role_name": "Store Keeper"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 
@@ -296,6 +387,7 @@
   "role_name": "Support Team"
  }, 
  {
+  "desk_access": 0, 
   "disabled": 0, 
   "docstatus": 0, 
   "doctype": "Role", 

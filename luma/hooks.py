@@ -80,6 +80,9 @@ doc_events = {
 	},
 	"Packing Slip": {
 		"validate":"luma.custom_method.item.packing_weight"
+	},
+	"Purchase Order": {
+		"before_save":"luma.custom_method.custom_method.set_item_values"
 	}
 }
 

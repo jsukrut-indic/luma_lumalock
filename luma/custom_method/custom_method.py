@@ -390,3 +390,34 @@ def get_remaining_qty(item_code):
 						and `tabPurchase Order Item`.item_code = '{0}' """
 						.format(frappe.db.escape(item_code)), as_dict=1)
 	return count and count[0].get("qty_to_receive", 0) or 0
+
+@frappe.whitelist()
+def get_outerbox_item(item_code):
+	item_data = {}
+	item_doc = frappe.get_doc("Item",item_code)
+	if item_doc.outer_box_code:
+		outerbox_doc = frappe.get_doc("Item",item_doc.outer_box_code)
+		item_data['outbox_wt'] = outerbox_doc.net_weight
+		item_data['outbox_length'] = outerbox_doc.length
+		item_data['outbox_height'] = outerbox_doc.height
+		item_data['outbox_width'] = outerbox_doc.width
+		item_data['description'] = outerbox_doc.description
+	if item_doc.inner_box_code:
+		innerbox_doc = frappe.get_doc("Item",item_doc.inner_box_code)
+		item_data['inbox_wt'] = innerbox_doc.net_weight
+	if item_doc.outer_box_code:
+		item_data['outer_box_code'] = item_doc.outer_box_code
+	item_data['nt_wt'] = item_doc.net_weight
+	return item_data
+
+
+@frappe.whitelist()
+def set_item_values(doc, method):
+	print "INSIDE HOOKS ___________________"
+	for row in doc.items:
+		if row.item_code:
+			row.outer_box_qty = flt(row.qty/row.outer_box_pcs)
+			row.inner_box_qty = flt(row.qty/row.inner_box_pcs)
+			row.total_volume = flt(row.length*row.width*row.height*row.outer_box_qty)
+			row.total_net_weight = flt(row.item_net_weight1/row.qty)
+			row.total_gross_weight1 = flt(row.qty*row.item_net_weight1 + (row.outer_box_qty*row.outer_box_weight)+(row.inner_box_qty*row.inner_box_weight))
