@@ -395,6 +395,9 @@ def get_remaining_qty(item_code):
 def get_outerbox_item(item_code):
 	item_data = {}
 	item_doc = frappe.get_doc("Item",item_code)
+	item_data['inner_box_pcs'] = item_doc.inner_box_pcs
+	item_data['outer_box_pcs'] = item_doc.outer_box_pcs
+	item_data['item_net_weight'] = item_doc.net_weight
 	if item_doc.outer_box_code:
 		outerbox_doc = frappe.get_doc("Item",item_doc.outer_box_code)
 		item_data['outbox_wt'] = outerbox_doc.net_weight
