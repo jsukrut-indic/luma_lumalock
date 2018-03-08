@@ -423,3 +423,11 @@ def set_item_values(doc, method):
 			row.total_volume = round(flt(row.length_new * row.width * row.height * row.outer_box_qty)/1000000000, 3)
 			row.total_net_weight = round(flt(row.item_net_weight1 * row.qty),2)
 			row.total_gross_weight1 = round(flt(row.qty*row.item_net_weight1 + (row.outer_box_qty*row.outer_box_weight)+(row.inner_box_qty*row.inner_box_weight)),2)
+
+@frappe.whitelist()
+def update_bom_cost(bomname):
+	bom = frappe.get_doc("BOM", bomname)
+	bom.update_cost()
+
+
+
