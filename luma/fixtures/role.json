@@ -6,6 +6,7 @@
   "doctype": "Role", 
   "modified": "2017-02-14 19:02:49.065646", 
   "name": "Knowledge Base Contributor", 
+  "restrict_to_domain": null, 
   "role_name": "Knowledge Base Contributor"
  }, 
  {
@@ -15,6 +16,7 @@
   "doctype": "Role", 
   "modified": "2017-02-14 19:02:49.067823", 
   "name": "Knowledge Base Editor", 
+  "restrict_to_domain": null, 
   "role_name": "Knowledge Base Editor"
  }, 
  {
@@ -24,6 +26,7 @@
   "doctype": "Role", 
   "modified": "2017-02-14 19:07:29.914447", 
   "name": "Fleet Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Fleet Manager"
  }, 
  {
@@ -31,17 +34,19 @@
   "disabled": 1, 
   "docstatus": 0, 
   "doctype": "Role", 
-  "modified": "2017-02-15 14:01:55.274922", 
+  "modified": "2018-03-19 16:31:25.331966", 
   "name": "Academics User", 
+  "restrict_to_domain": null, 
   "role_name": "Academics User"
  }, 
  {
   "desk_access": 1, 
-  "disabled": 0, 
+  "disabled": 1, 
   "docstatus": 0, 
   "doctype": "Role", 
-  "modified": "2017-02-14 19:10:46.991697", 
+  "modified": "2018-03-19 16:31:25.352006", 
   "name": "Instructor", 
+  "restrict_to_domain": null, 
   "role_name": "Instructor"
  }, 
  {
@@ -51,6 +56,7 @@
   "doctype": "Role", 
   "modified": "2017-02-14 19:11:37.568712", 
   "name": "Student", 
+  "restrict_to_domain": null, 
   "role_name": "Student"
  }, 
  {
@@ -60,6 +66,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:08.950107", 
   "name": "System Manager", 
+  "restrict_to_domain": null, 
   "role_name": "System Manager"
  }, 
  {
@@ -69,6 +76,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:08.951067", 
   "name": "All", 
+  "restrict_to_domain": null, 
   "role_name": "All"
  }, 
  {
@@ -78,6 +86,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:08.954903", 
   "name": "Administrator", 
+  "restrict_to_domain": null, 
   "role_name": "Administrator"
  }, 
  {
@@ -87,6 +96,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:08.955850", 
   "name": "Guest", 
+  "restrict_to_domain": null, 
   "role_name": "Guest"
  }, 
  {
@@ -96,6 +106,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:09.119714", 
   "name": "Website Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Website Manager"
  }, 
  {
@@ -105,6 +116,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:09.304383", 
   "name": "Blogger", 
+  "restrict_to_domain": null, 
   "role_name": "Blogger"
  }, 
  {
@@ -114,6 +126,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:10.531148", 
   "name": "Sales User", 
+  "restrict_to_domain": null, 
   "role_name": "Sales User"
  }, 
  {
@@ -123,6 +136,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:10.537312", 
   "name": "Accounts User", 
+  "restrict_to_domain": null, 
   "role_name": "Accounts User"
  }, 
  {
@@ -132,6 +146,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:10.538381", 
   "name": "Purchase User", 
+  "restrict_to_domain": null, 
   "role_name": "Purchase User"
  }, 
  {
@@ -141,6 +156,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:12.124132", 
   "name": "Report Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Report Manager"
  }, 
  {
@@ -150,6 +166,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:21.774275", 
   "name": "Accounts Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Accounts Manager"
  }, 
  {
@@ -159,6 +176,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:22.030771", 
   "name": "Employee", 
+  "restrict_to_domain": null, 
   "role_name": "Employee"
  }, 
  {
@@ -168,6 +186,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:22.055793", 
   "name": "Stock User", 
+  "restrict_to_domain": null, 
   "role_name": "Stock User"
  }, 
  {
@@ -177,6 +196,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:22.119885", 
   "name": "Purchase Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Purchase Manager"
  }, 
  {
@@ -186,6 +206,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:22.145481", 
   "name": "Purchase Master Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Purchase Master Manager"
  }, 
  {
@@ -195,6 +216,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:22.264923", 
   "name": "Auditor", 
+  "restrict_to_domain": null, 
   "role_name": "Auditor"
  }, 
  {
@@ -204,6 +226,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:22.369591", 
   "name": "Sales Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Sales Manager"
  }, 
  {
@@ -213,6 +236,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:22.694621", 
   "name": "Sales Master Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Sales Master Manager"
  }, 
  {
@@ -222,6 +246,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:23.545440", 
   "name": "Supplier", 
+  "restrict_to_domain": null, 
   "role_name": "Supplier"
  }, 
  {
@@ -231,6 +256,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:24.332875", 
   "name": "Customer", 
+  "restrict_to_domain": null, 
   "role_name": "Customer"
  }, 
  {
@@ -240,6 +266,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:24.903564", 
   "name": "Newsletter Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Newsletter Manager"
  }, 
  {
@@ -249,15 +276,17 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:25.534145", 
   "name": "Quality Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Quality Manager"
  }, 
  {
   "desk_access": 0, 
-  "disabled": 0, 
+  "disabled": 1, 
   "docstatus": 0, 
   "doctype": "Role", 
-  "modified": "2017-06-14 20:53:51.262299", 
+  "modified": "2018-03-19 16:31:25.308045", 
   "name": "Manufacturing Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Manufacturing Manager"
  }, 
  {
@@ -267,6 +296,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:25.988372", 
   "name": "Stock Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Stock Manager"
  }, 
  {
@@ -276,6 +306,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:26.124085", 
   "name": "Projects User", 
+  "restrict_to_domain": null, 
   "role_name": "Projects User"
  }, 
  {
@@ -285,6 +316,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:26.379909", 
   "name": "Projects Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Projects Manager"
  }, 
  {
@@ -294,6 +326,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:27.216071", 
   "name": "Maintenance User", 
+  "restrict_to_domain": null, 
   "role_name": "Maintenance User"
  }, 
  {
@@ -303,6 +336,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:27.250247", 
   "name": "Maintenance Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Maintenance Manager"
  }, 
  {
@@ -312,6 +346,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:28.276340", 
   "name": "Item Manager", 
+  "restrict_to_domain": null, 
   "role_name": "Item Manager"
  }, 
  {
@@ -321,6 +356,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:28.782439", 
   "name": "HR User", 
+  "restrict_to_domain": null, 
   "role_name": "HR User"
  }, 
  {
@@ -330,6 +366,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:28.899097", 
   "name": "HR Manager", 
+  "restrict_to_domain": null, 
   "role_name": "HR Manager"
  }, 
  {
@@ -339,6 +376,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:29.153494", 
   "name": "Leave Approver", 
+  "restrict_to_domain": null, 
   "role_name": "Leave Approver"
  }, 
  {
@@ -348,15 +386,17 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:30.576471", 
   "name": "Expense Approver", 
+  "restrict_to_domain": null, 
   "role_name": "Expense Approver"
  }, 
  {
   "desk_access": 0, 
-  "disabled": 0, 
+  "disabled": 1, 
   "docstatus": 0, 
   "doctype": "Role", 
-  "modified": "2017-06-14 20:54:23.482377", 
+  "modified": "2018-03-19 16:31:25.283604", 
   "name": "Manufacturing User", 
+  "restrict_to_domain": null, 
   "role_name": "Manufacturing User"
  }, 
  {
@@ -366,6 +406,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:33.615465", 
   "name": "Office Coordinator", 
+  "restrict_to_domain": null, 
   "role_name": "Office Coordinator"
  }, 
  {
@@ -375,6 +416,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:33.656081", 
   "name": "Store Keeper", 
+  "restrict_to_domain": null, 
   "role_name": "Store Keeper"
  }, 
  {
@@ -384,6 +426,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:34.208311", 
   "name": "Support Team", 
+  "restrict_to_domain": null, 
   "role_name": "Support Team"
  }, 
  {
@@ -393,6 +436,7 @@
   "doctype": "Role", 
   "modified": "2016-02-10 18:35:37.778203", 
   "name": "Analytics", 
+  "restrict_to_domain": null, 
   "role_name": "Analytics"
  }
 ]

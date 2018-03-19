@@ -423,3 +423,65 @@ def set_item_values(doc, method):
 			row.total_volume = round(flt(row.length_new * row.width * row.height * row.outer_box_qty)/1000000000, 3)
 			row.total_net_weight = round(flt(row.item_net_weight1 * row.qty),2)
 			row.total_gross_weight1 = round(flt(row.qty*row.item_net_weight1 + (row.outer_box_qty*row.outer_box_weight)+(row.inner_box_qty*row.inner_box_weight)),2)
+
+@frappe.whitelist()
+def make_new_so(source_name, target_doc=None):
+	def set_missing_values(source, target):
+		if source.po_no:
+			if target.po_no:
+				target_po_no = target.po_no.split(", ")
+				target_po_no.append(source.po_no)
+				target.po_no = ", ".join(list(set(target_po_no))) if len(target_po_no) > 1 else target_po_no[0]
+			else:
+				target.po_no = source.po_no
+
+		target.ignore_pricing_rule = 1
+		target.run_method("set_missing_values")
+		target.run_method("calculate_taxes_and_totals")
+
+	def update_item(source, target, source_parent):
+		target.base_amount = (flt(source.qty) - flt(source.delivered_qty)) * flt(source.base_rate)
+		target.amount = (flt(source.qty) - flt(source.delivered_qty)) * flt(source.rate)
+		target.qty = flt(source.qty) - flt(source.delivered_qty)
+
+		item = frappe.db.get_value("Item", target.item_code, ["item_group", "selling_cost_center"], as_dict=1)
+		target.cost_center = frappe.db.get_value("Project", source_parent.project, "cost_center") \
+			or item.selling_cost_center \
+			or frappe.db.get_value("Item Group", item.item_group, "default_cost_center")
+
+	# target_doc = get_mapped_doc("Sales Order", source_name,
+	# 	{
+	# 		"Sales Order": {
+	# 			"doctype": "Sales Order",
+	# 		},
+	# 	}, target_doc)
+	
+	target_doc = get_mapped_doc("Sales Order", source_name, {
+		"Sales Order": {
+			"doctype": "Sales Order",
+			"validation": {
+				"docstatus": ["=", 1]
+			}
+		},
+		"Sales Order Item": {
+			"doctype": "Sales Order Item",
+			"field_map": {
+				"rate": "rate",
+				"name": "so_detail",
+				"parent": "against_sales_order",
+			},
+			"postprocess": update_item,
+			"condition": lambda doc: abs(doc.delivered_qty) < abs(doc.qty) and doc.delivered_by_supplier!=1
+		},
+		"Sales Taxes and Charges": {
+			"doctype": "Sales Taxes and Charges",
+			"add_if_empty": True
+		},
+		"Sales Team": {
+			"doctype": "Sales Team",
+			"add_if_empty": True
+		}
+	}, target_doc, set_missing_values)
+	target_doc.parent_name = source_name
+	return target_doc
+

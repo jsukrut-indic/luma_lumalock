@@ -74,6 +74,9 @@ fixtures =['Custom Field', "Property Setter","Custom Script","Print Format", "Ro
 # ---------------
 # Hook on document methods and events
 
+doctype_js = {
+	"Sales Order":["luma/custom_method/custom_sales_order.js"]
+}
 doc_events = {
 	"Delivery Note": {
 		"validate":"luma.custom_method.item.item_logistic"
