@@ -425,6 +425,11 @@ def set_item_values(doc, method):
 			row.total_gross_weight1 = round(flt(row.qty*row.item_net_weight1 + (row.outer_box_qty*row.outer_box_weight)+(row.inner_box_qty*row.inner_box_weight)),2)
 
 @frappe.whitelist()
+def update_bom_cost(bomname):
+	bom = frappe.get_doc("BOM", bomname)
+	bom.update_cost()
+
+@frappe.whitelist()
 def make_new_so(source_name, target_doc=None):
 	def set_missing_values(source, target):
 		if source.po_no:
@@ -484,4 +489,5 @@ def make_new_so(source_name, target_doc=None):
 	}, target_doc, set_missing_values)
 	target_doc.parent_name = source_name
 	return target_doc
+
 
