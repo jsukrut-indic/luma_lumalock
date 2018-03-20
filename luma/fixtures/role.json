@@ -34,7 +34,7 @@
   "disabled": 1, 
   "docstatus": 0, 
   "doctype": "Role", 
-  "modified": "2018-03-19 16:31:25.331966", 
+  "modified": "2018-03-20 18:17:12.018279", 
   "name": "Academics User", 
   "restrict_to_domain": null, 
   "role_name": "Academics User"
@@ -44,7 +44,7 @@
   "disabled": 1, 
   "docstatus": 0, 
   "doctype": "Role", 
-  "modified": "2018-03-19 16:31:25.352006", 
+  "modified": "2018-03-20 18:17:12.044076", 
   "name": "Instructor", 
   "restrict_to_domain": null, 
   "role_name": "Instructor"
@@ -284,7 +284,7 @@
   "disabled": 1, 
   "docstatus": 0, 
   "doctype": "Role", 
-  "modified": "2018-03-19 16:31:25.308045", 
+  "modified": "2018-03-20 18:17:11.988724", 
   "name": "Manufacturing Manager", 
   "restrict_to_domain": null, 
   "role_name": "Manufacturing Manager"
@@ -394,7 +394,7 @@
   "disabled": 1, 
   "docstatus": 0, 
   "doctype": "Role", 
-  "modified": "2018-03-19 16:31:25.283604", 
+  "modified": "2018-03-20 18:17:11.966883", 
   "name": "Manufacturing User", 
   "restrict_to_domain": null, 
   "role_name": "Manufacturing User"
