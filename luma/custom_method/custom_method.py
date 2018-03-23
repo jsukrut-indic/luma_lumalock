@@ -306,9 +306,6 @@ def get_general_enquiry(item_code):
 		
 		for i in purchase_orders:
 			i["currency"] = currency.symbol	
-		print purchase_orders,"purchase_orders updated"	
-
-
 
 
 	production_orders_query = """ select pro.production_item,
@@ -428,7 +425,9 @@ def set_item_values(doc, method):
 def update_bom_cost(bomname):
 	bom = frappe.get_doc("BOM", bomname)
 	bom.update_cost()
-
+'''
+Make New Sales Order from Closed Sales Order 
+'''
 @frappe.whitelist()
 def make_new_so(source_name, target_doc=None):
 	def set_missing_values(source, target):
@@ -439,7 +438,6 @@ def make_new_so(source_name, target_doc=None):
 				target.po_no = ", ".join(list(set(target_po_no))) if len(target_po_no) > 1 else target_po_no[0]
 			else:
 				target.po_no = source.po_no
-
 		target.ignore_pricing_rule = 1
 		target.run_method("set_missing_values")
 		target.run_method("calculate_taxes_and_totals")
@@ -454,13 +452,6 @@ def make_new_so(source_name, target_doc=None):
 			or item.selling_cost_center \
 			or frappe.db.get_value("Item Group", item.item_group, "default_cost_center")
 
-	# target_doc = get_mapped_doc("Sales Order", source_name,
-	# 	{
-	# 		"Sales Order": {
-	# 			"doctype": "Sales Order",
-	# 		},
-	# 	}, target_doc)
-	
 	target_doc = get_mapped_doc("Sales Order", source_name, {
 		"Sales Order": {
 			"doctype": "Sales Order",
