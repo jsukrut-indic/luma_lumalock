@@ -195,7 +195,7 @@ def get_items_from_production_order(item_code):
 							from `tabItem`t1,`tabProduction Order`t2 
 							where t1.item_code = '{0}' and t2.name in (select name from `tabProduction Order` where production_item = '{0}' 
 							and docstatus = 1 and status != "Cancelled" and status != "Stopped") 
-							order by date asc""".format(item_code),as_dict=1)
+							order by date asc""".format(item_code),as_dict=1,debug=1)
 
 # def get_items_from_production_order(production_order):
 # 	return frappe.db.sql("""select t1.item_code,t1.description,t2.name,date_format(t2.planned_start_date,'%d-%m-%Y') as date,
@@ -273,7 +273,7 @@ def get_general_enquiry(item_code):
 					   so.delivery_date 
 				from `tabSales Order` so, 
 					 `tabSales Order Item` soi 
-				where so.name=soi.parent 
+				where so.name=soi.parent and soi.qty-soi.delivered_qty>0
 					and soi.item_code='%s' and so.docstatus=1 and so.status != "Closed" """%(item_code)
 
 	sales_orders = frappe.db.sql(sales_orders_query, as_dict=True)
@@ -316,7 +316,7 @@ def get_general_enquiry(item_code):
 								   
 				from `tabProduction Order` as pro 
 				where pro.production_item='%s' and pro.docstatus=1 
-				and pro.status in ("Submitted","In Process") """%(item_code)
+				and pro.status in ("Submitted","In Process","Not Started") """%(item_code)
 
 	production_orders = frappe.db.sql(production_orders_query, as_dict=True)
 
@@ -324,10 +324,16 @@ def get_general_enquiry(item_code):
 	for i in production_orders:
 		i["planned_start_date"] = i['planned_start_date'].date()
 
+	reserved_section_query = """select po.production_item,po.description,po.name,(po.qty - po.produced_qty) as pending_qty,
+						   po.planned_start_date from `tabProduction Order` po ,`tabProduction Order Item` poi 
+						   where poi.item_code ='%s' and po.name = poi.parent and po.status !='Completed' """%(item_code)
+	reserved_orders = frappe.db.sql(reserved_section_query, as_dict=True)
+	
 	return {
 		"sales_orders": sales_orders,
 		"purchase_orders": purchase_orders,
-		"production_orders": production_orders
+		"production_orders": production_orders,
+		"reserved_orders" :reserved_orders
 	}
 
 @frappe.whitelist()
