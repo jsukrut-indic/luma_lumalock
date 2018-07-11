@@ -2917,7 +2917,7 @@
   "doctype": "Property Setter", 
   "doctype_or_field": "DocType", 
   "field_name": null, 
-  "modified": "2018-07-10 22:24:12.526878", 
+  "modified": "2018-07-11 14:38:49.291308", 
   "name": "Item-read_only_onload", 
   "property": "read_only_onload", 
   "property_type": "Check", 
