@@ -295,7 +295,7 @@ def get_general_enquiry(item_code):
 					   po.transaction_date
 				from `tabPurchase Order` po, 
 					 `tabPurchase Order Item` poi 
-				where po.name=poi.parent
+				where po.name=poi.parent and poi.qty-poi.received_qty>0
 					and poi.item_code='%s' and po.docstatus=1 and po.status != "Closed" """%(item_code)
 
 	purchase_orders = frappe.db.sql(purchase_orders_query, as_dict=True)
